@@ -1,0 +1,32 @@
+[
+    {
+        "distributor_id": 1,
+        "distributor_name": "Metro Food & Beverage Distribution",
+        "phone_number": "(312) 555-0201",
+        "street_address": "2500 Distribution Center Drive",
+        "postal_code": "60609",
+        "city": "Chicago",
+        "country": "United States",
+        "operation": "insert"
+    },
+    {
+        "distributor_id": 2,
+        "distributor_name": "Coastal Consumer Goods Distribution",
+        "phone_number": "(213) 555-0202",
+        "street_address": "8800 Harbor Boulevard",
+        "postal_code": "90001",
+        "city": "Los Angeles",
+        "country": "United States",
+        "operation": "insert"
+    },
+    {
+        "distributor_id": 3,
+        "distributor_name": "Atlantic Wholesale Supply",
+        "phone_number": "(404) 555-0203",
+        "street_address": "1200 Commerce Parkway",
+        "postal_code": "30309",
+        "city": "Atlanta",
+        "country": "United States",
+        "operation": "insert"
+    }
+]
