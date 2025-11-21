@@ -1,5 +1,5 @@
 [project]
-name = "cpg_manufacturer"
+name = "manufacturer"
 version = "0.0.1"
 authors = [{ name = "thanyarkottary2003@gmail.com" }]
 requires-python = ">=3.10,<=3.13"
@@ -19,7 +19,7 @@ dev = [
 ]
 
 [project.scripts]
-main = "cpg_manufacturer.main:main"
+main = "manufacturer.main:main"
 
 [build-system]
 requires = ["hatchling"]

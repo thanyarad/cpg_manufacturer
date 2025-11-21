@@ -1,7 +1,7 @@
 # This is a Databricks asset bundle definition for cpg_manufacturer.
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 bundle:
-  name: cpg_manufacturer
+  name: manufacturer
   uuid: 0cddd31f-0c85-4c6e-93e6-195970861549
 
 include:
