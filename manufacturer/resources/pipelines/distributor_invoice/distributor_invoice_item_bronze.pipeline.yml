@@ -1,0 +1,13 @@
+resources:
+  pipelines:
+    distributor_invoice_item_bronze:
+      name: distributor_invoice_item_bronze
+      libraries:
+        - glob:
+            include: ../../../src/distributor_invoice/distributor_invoice_item_bronze/transformations/**
+      serverless: true
+      catalog: dev
+      schema: 01_bronze
+      root_path: ../../../src/distributor_invoice/distributor_invoice_item_bronze
+
+      # /Workspace/Users/mugunthan2783@gmail.com/cpg_manufacturer/manufacturer/src/distributor_invoice/distributor_invoice_item_bronze/transformations
