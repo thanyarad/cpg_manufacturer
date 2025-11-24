@@ -4,9 +4,9 @@ resources:
       name: consumer_orders_silver
       libraries:
         - glob:
-            include: ../../src/consumer_orders/consumer_orders_silver/transformations/**
+            include: ../../../src/consumer_orders/consumer_orders_silver/transformations/**
       serverless: true
       catalog: dev
       schema: 02_silver
-      root_path: ../../src/consumer_orders/consumer_orders_silver
+      root_path: ../../../src/consumer_orders/consumer_orders_silver
 

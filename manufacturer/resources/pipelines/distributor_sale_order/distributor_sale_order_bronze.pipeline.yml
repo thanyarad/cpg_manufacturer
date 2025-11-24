@@ -4,8 +4,8 @@ resources:
       name: distributor_sale_order_bronze
       libraries:
         - glob:
-            include: ../src/distributor_sale_order_bronze/transformations/**
+            include: ../../../src/distributor_sale_order/distributor_sale_order_bronze/transformations/**
       serverless: true
       catalog: dev
       schema: ${workspace.current_user.short_name}
-      root_path: ../src/distributor_sale_order_bronze
+      root_path: ../../../src/distributor_sale_order/distributor_sale_order_bronze

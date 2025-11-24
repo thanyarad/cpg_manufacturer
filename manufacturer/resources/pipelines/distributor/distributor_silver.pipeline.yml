@@ -4,8 +4,8 @@ resources:
       name: distributor_silver
       libraries:
         - glob:
-            include: ../../src/distributor/distributor_silver/transformations/**
+            include: ../../../src/distributor/distributor_silver/transformations/**
       serverless: true
       catalog: dev
       schema: 02_silver
-      root_path: ../../src/distributor/distributor_silver
+      root_path: ../../../src/distributor/distributor_silver
