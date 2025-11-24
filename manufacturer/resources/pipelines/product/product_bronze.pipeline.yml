@@ -4,7 +4,7 @@ resources:
       name: product_bronze
       libraries:
         - glob:
-          include: ../../../src/product/product_bronze/transformations/**
+            include: ../../../src/product/product_bronze/transformations/**
       serverless: true
       catalog: dev
       schema: 00_landing
