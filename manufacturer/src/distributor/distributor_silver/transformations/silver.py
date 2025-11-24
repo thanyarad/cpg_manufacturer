@@ -9,7 +9,7 @@ to_schema="02_silver"
 @dp.expect_or_drop("valid_distributor", "distributor_id IS NOT NULL")
 def distributor_mv():
     df = spark.read.table(f"{catalog}.{from_schema}.distributor_mv")
-    string_cols = ["distributor_name","city","country"]
+    string_cols = ["distributor_name","city","state","country"]
     for c in string_cols:
         df = df.withColumn(c, trim(col(c)))
     df = df.withColumn(

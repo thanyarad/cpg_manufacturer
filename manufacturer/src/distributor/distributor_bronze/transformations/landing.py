@@ -9,11 +9,12 @@ distributor_schema=StructType([
     StructField("street_address", StringType()),
     StructField("postal_code", StringType()),
     StructField("city", StringType()),
+    StructField("state", StringType()),
     StructField("country", StringType()),
     StructField("operation", StringType())
 ])
 
-input_file_path=r"/Volumes/dev/00_landing/data/"
+input_file_path=r"/Volumes/dev/00_landing/data/distributor/"
 catalog="dev"
 schema="00_landing"
 
