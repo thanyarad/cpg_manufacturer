@@ -1,0 +1,11 @@
+resources:
+  pipelines:
+    distributor_bronze:
+      name: distributor_bronze
+      libraries:
+        - glob:
+            include: ../../src/distributor/distributor_bronze/transformations/**
+      serverless: true
+      catalog: dev
+      schema: 00_landing
+      root_path: ../../src/distributor/distributor_bronze
