@@ -9,13 +9,13 @@ resources:
       tasks:
         - task_key: distributor_bronze
           pipeline_task:
-            pipeline_id: ${resources.pipelines.distributor_bronze.pipeline_id}
+            pipeline_id: ${resources.pipelines.distributor_bronze.id}
             full_refresh: false
         - task_key: distributor_silver
           depends_on:
             - task_key: distributor_bronze
           pipeline_task:
-            pipeline_id: ${resources.pipelines.distributor_silver.pipeline_id}
+            pipeline_id: ${resources.pipelines.distributor_silver.id}
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED
