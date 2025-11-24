@@ -2,6 +2,7 @@ from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 from pyspark.sql.functions import current_timestamp, col, expr
 
+# sale order
 # {
 #         "sales_order_id": 1,
 #         "distributor_id": 1,
