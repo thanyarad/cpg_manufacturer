@@ -1,0 +1,27 @@
+resources:
+  jobs:
+    consumer_orders:
+      name: consumer_orders
+      trigger:
+        pause_status: UNPAUSED
+        file_arrival:
+          url: /Volumes/dev/00_landing/data/
+      tasks:
+        - task_key: consumer_order_bronze
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.consumer_order_bronze.id}
+            full_refresh: false
+        - task_key: consumer_order_items_bronze
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.consumer_order_items_bronze.id}
+            full_refresh: false
+        - task_key: consumer_orders_silver
+          depends_on:
+            - task_key: consumer_order_bronze
+            - task_key: consumer_order_items_bronze
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.consumer_orders_silver.id}
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+

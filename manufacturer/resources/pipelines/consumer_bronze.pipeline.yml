@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    consumer_bronze:
+      name: consumer_bronze
+      libraries:
+        - glob:
+            include: ../../src/consumer/consumer_bronze/transformations/**
+      serverless: true
+      catalog: dev
+      schema: 00_landing
+      root_path: ../../src/consumer/consumer_bronze
+

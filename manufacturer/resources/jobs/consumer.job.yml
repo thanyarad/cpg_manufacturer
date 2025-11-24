@@ -1,0 +1,22 @@
+resources:
+  jobs:
+    consumer:
+      name: consumer
+      trigger:
+        pause_status: UNPAUSED
+        file_arrival:
+          url: /Volumes/dev/00_landing/data/consumer/
+      tasks:
+        - task_key: consumer_bronze
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.consumer_bronze.id}
+            full_refresh: false
+        - task_key: consumer_silver
+          depends_on:
+            - task_key: consumer_bronze
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.consumer_silver.id}
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+
