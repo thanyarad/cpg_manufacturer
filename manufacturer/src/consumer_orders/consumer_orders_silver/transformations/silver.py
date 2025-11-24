@@ -5,7 +5,7 @@ catalog="dev"
 from_schema="01_bronze"
 to_schema="02_silver"
 
-@dp.materialized_view(name=f"{catalog}.{to_schema}.consumer_orders_silver_mv")
+@dp.materialized_view(name=f"{catalog}.{to_schema}.consumer_orders_mv")
 @dp.expect_or_drop("valid_order", "order_id IS NOT NULL")
 @dp.expect_or_drop("valid_order_item", "order_item_id IS NOT NULL")
 def consumer_orders_silver_mv():

@@ -5,7 +5,7 @@ resources:
       trigger:
         pause_status: UNPAUSED
         file_arrival:
-          url: /Volumes/dev/00_landing/data/
+          url: /Volumes/dev/00_landing/data/consumer_orders/
       tasks:
         - task_key: consumer_order_bronze
           pipeline_task:

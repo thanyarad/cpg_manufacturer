@@ -16,7 +16,7 @@ consumer_order_schema=StructType([
     StructField("operation", StringType())
 ])
 
-input_file_path=r"/Volumes/dev/00_landing/data/consumer_order/"
+input_file_path=r"/Volumes/dev/00_landing/data/consumer_orders/consumer_order/"
 catalog="dev"
 schema="00_landing"
 

@@ -5,9 +5,9 @@ catalog="dev"
 from_schema="01_bronze"
 to_schema="02_silver"
 
-@expect_all_or_drop({
+@dp.expect_all_or_drop({
     "valid_distributor": "distributor_id IS NOT NULL",
-    "valid_sales_order" : "sale_order_id IS NOT NULL"
+    "valid_sales_order" : "sales_order_id IS NOT NULL"
 })
 @dp.temporary_view(name=f"sale_order_temp")
 def sale_order_temp():
@@ -16,7 +16,7 @@ def sale_order_temp():
     df=df.withColumn("expected_delivery_date",to_date(col("expected_delivery_date"),"yyyy-MM-dd"))
     return df
 
-@expect_all_or_drop({
+@dp.expect_all_or_drop({
     "valid_sales_order" : "sales_order_id is NOT NULL",
     "valid_sales_order_item": "sales_order_item_no is NOT NULL"
 })
@@ -41,8 +41,9 @@ def sale_order_item_temp():
 def distributor_mv():
     sale_order_temp()
     sale_order_item_temp()
-    df_joined=spark.sql(""" 
-        select so.sales_order_id as order_id,
+    df_joined=spark.sql(f""" 
+        select 
+        so.sales_order_id as order_id,
         so.distributor_id, 
         so.order_date, 
         so.expected_delivery_date,  
@@ -55,7 +56,7 @@ def distributor_mv():
         soi.item_total_amount
         from sale_order_item_temp soi
         LEFT JOIN sale_order_temp so
-        ON so.sales_order_id = soi.sale_order_id
+        ON so.sales_order_id = soi.sales_order_id
     """)
     return df_joined
 
