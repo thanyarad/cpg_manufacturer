@@ -39,27 +39,30 @@ def consumer_orders_silver_mv():
         .otherwise(None)
     )
     
-    joined_df = items_df.join(
-        orders_df,
-        items_df["order_id"] == orders_df["order_id"],
-        "inner"
-    ).select(
-        items_df["order_item_id"],
-        items_df["order_id"],
-        items_df["product_id"],
-        items_df["quantity"],
-        items_df["unit_price"],
-        items_df["total_price"],
-        orders_df["consumer_id"],
-        orders_df["order_date"],
-        orders_df["order_status"],
-        orders_df["total_amount"].alias("order_total_amount"),
-        orders_df["currency"],
-        orders_df["payment_method"],
-        orders_df["channel"],
-        orders_df["billing_address"],
-        orders_df["shipping_address"]
-    )
+    orders_df.createOrReplaceTempView("orders_temp")
+    items_df.createOrReplaceTempView("items_temp")
+    
+    joined_df = spark.sql("""
+        SELECT 
+            i.order_item_id,
+            i.order_id,
+            i.product_id,
+            i.quantity,
+            i.unit_price,
+            i.total_price,
+            o.consumer_id,
+            o.order_date,
+            o.order_status,
+            o.total_amount AS order_total_amount,
+            o.currency,
+            o.payment_method,
+            o.channel,
+            o.billing_address,
+            o.shipping_address
+        FROM items_temp i
+        INNER JOIN orders_temp o
+        ON i.order_id = o.order_id
+    """)
     
     return joined_df
 
