@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    product_bronze:
+      name: product_bronze
+      libraries:
+        - glob:
+          include: ../../../src/product/product_bronze/transformations/**
+      serverless: true
+      catalog: dev
+      schema: 00_landing
+      root_path: ../../../src/product/product_bronze
+

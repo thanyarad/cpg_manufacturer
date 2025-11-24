@@ -1,0 +1,22 @@
+resources:
+  jobs:
+    inventory:
+      name: inventory
+      trigger:
+        pause_status: UNPAUSED
+        file_arrival:
+          url: /Volumes/dev/00_landing/data/inventory/
+      tasks:
+        - task_key: inventory_bronze
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.inventory_bronze.id}
+            full_refresh: false
+        - task_key: inventory_silver
+          depends_on:
+            - task_key: inventory_bronze
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.inventory_silver.id}
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+
