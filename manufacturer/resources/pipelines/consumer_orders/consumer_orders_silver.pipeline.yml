@@ -5,6 +5,8 @@ resources:
       libraries:
         - glob:
             include: ../../../src/consumer_orders/consumer_orders_silver/transformations/**
+        - glob:
+            include: ../../../src/manufacturer/**
       serverless: true
       catalog: dev
       schema: 02_silver

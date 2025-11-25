@@ -5,6 +5,8 @@ resources:
       libraries:
         - glob:
             include: ../../../src/distributor_sale_order/distributor_sale_order_item_bronze/transformations/**
+        - glob:
+            include: ../../../src/manufacturer/**
       serverless: true
       catalog: dev
       schema: 00_landing

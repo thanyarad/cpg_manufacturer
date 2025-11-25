@@ -5,6 +5,8 @@ resources:
       libraries:
         - glob:
             include: ../../../src/inventory/inventory_bronze/transformations/**
+        - glob:
+            include: ../../../src/manufacturer/**
       serverless: true
       catalog: dev
       schema: 00_landing

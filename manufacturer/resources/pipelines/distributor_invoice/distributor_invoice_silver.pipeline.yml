@@ -5,6 +5,8 @@ resources:
       libraries:
         - glob:
             include: ../../../src/distributor_invoice/distributor_invoice_silver/transformations/**
+        - glob:
+            include: ../../../src/manufacturer/**
       serverless: true
       catalog: dev
       schema: 02_silver
