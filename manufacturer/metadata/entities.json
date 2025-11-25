@@ -1,0 +1,266 @@
+{
+  "entities": [
+    {
+      "name": "product",
+      "display_name": "Product",
+      "primary_key": ["product_id"],
+      "input_path": "/Volumes/dev/00_landing/data/product/",
+      "schema": [
+        {"name": "product_id", "type": "IntegerType"},
+        {"name": "product_name", "type": "StringType"},
+        {"name": "brand", "type": "StringType"},
+        {"name": "manufacturer", "type": "StringType"},
+        {"name": "category", "type": "StringType"},
+        {"name": "department", "type": "StringType"},
+        {"name": "description", "type": "StringType"},
+        {"name": "sku_id", "type": "StringType"},
+        {"name": "upc", "type": "StringType"},
+        {"name": "gtin", "type": "StringType"},
+        {"name": "unit_price", "type": "DoubleType"},
+        {"name": "retail_price", "type": "DoubleType"},
+        {"name": "unit_of_measurement", "type": "StringType"},
+        {"name": "expiration_days", "type": "IntegerType"},
+        {"name": "product_status", "type": "StringType"},
+        {"name": "release_date", "type": "StringType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["product_name", "brand", "manufacturer", "category", "department", "description", "sku_id", "upc", "gtin", "unit_of_measurement", "product_status"],
+        "normalize_upc_gtin": true,
+        "cast_numeric": ["unit_price", "retail_price"],
+        "date_columns": [{"name": "release_date", "format": "yyyy-MM-dd"}],
+        "expectations": ["product_id IS NOT NULL"]
+      }
+    },
+    {
+      "name": "consumer",
+      "display_name": "Consumer",
+      "primary_key": ["consumer_id"],
+      "input_path": "/Volumes/dev/00_landing/data/consumer/",
+      "schema": [
+        {"name": "consumer_id", "type": "IntegerType"},
+        {"name": "name", "type": "StringType"},
+        {"name": "age", "type": "IntegerType"},
+        {"name": "gender", "type": "StringType"},
+        {"name": "email", "type": "StringType"},
+        {"name": "phone", "type": "StringType"},
+        {"name": "address", "type": "StringType"},
+        {"name": "city", "type": "StringType"},
+        {"name": "state", "type": "StringType"},
+        {"name": "country", "type": "StringType"},
+        {"name": "registration_date", "type": "StringType"},
+        {"name": "is_active", "type": "BooleanType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["name", "gender", "email", "phone", "address", "city", "state", "country"],
+        "normalize_email": true,
+        "normalize_phone": true,
+        "date_columns": [{"name": "registration_date", "format": "yyyy-MM-dd"}],
+        "expectations": ["consumer_id IS NOT NULL"]
+      }
+    },
+    {
+      "name": "distributor",
+      "display_name": "Distributor",
+      "primary_key": ["distributor_id"],
+      "input_path": "/Volumes/dev/00_landing/data/distributor/",
+      "schema": [
+        {"name": "distributor_id", "type": "IntegerType"},
+        {"name": "distributor_name", "type": "StringType"},
+        {"name": "phone_number", "type": "StringType"},
+        {"name": "street_address", "type": "StringType"},
+        {"name": "postal_code", "type": "StringType"},
+        {"name": "city", "type": "StringType"},
+        {"name": "state", "type": "StringType"},
+        {"name": "country", "type": "StringType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["distributor_name", "phone_number", "street_address", "postal_code", "city", "state", "country"],
+        "normalize_phone": true,
+        "expectations": ["distributor_id IS NOT NULL"]
+      }
+    },
+    {
+      "name": "inventory",
+      "display_name": "Inventory",
+      "primary_key": ["inventory_id"],
+      "input_path": "/Volumes/dev/00_landing/data/inventory/",
+      "schema": [
+        {"name": "inventory_id", "type": "IntegerType"},
+        {"name": "product_id", "type": "IntegerType"},
+        {"name": "location_type", "type": "StringType"},
+        {"name": "location_name", "type": "StringType"},
+        {"name": "location_code", "type": "StringType"},
+        {"name": "address", "type": "StringType"},
+        {"name": "city", "type": "StringType"},
+        {"name": "state", "type": "StringType"},
+        {"name": "country", "type": "StringType"},
+        {"name": "phone", "type": "StringType"},
+        {"name": "email", "type": "StringType"},
+        {"name": "location_is_active", "type": "BooleanType"},
+        {"name": "quantity_on_hand", "type": "IntegerType"},
+        {"name": "reorder_level", "type": "IntegerType"},
+        {"name": "reorder_quantity", "type": "IntegerType"},
+        {"name": "safety_stock_level", "type": "IntegerType"},
+        {"name": "inventory_status", "type": "StringType"},
+        {"name": "last_restock_date", "type": "StringType"},
+        {"name": "last_updated", "type": "StringType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["location_type", "location_name", "location_code", "address", "city", "state", "country", "phone", "email", "inventory_status"],
+        "normalize_phone": true,
+        "normalize_email": true,
+        "cast_numeric": ["product_id", "quantity_on_hand", "reorder_level", "reorder_quantity", "safety_stock_level"],
+        "date_columns": [
+          {"name": "last_restock_date", "format": "yyyy-MM-dd"},
+          {"name": "last_updated", "format": "yyyy-MM-dd HH:mm:ss"}
+        ],
+        "expectations": ["inventory_id IS NOT NULL"]
+      }
+    },
+    {
+      "name": "consumer_order",
+      "display_name": "Consumer Order",
+      "primary_key": ["order_id"],
+      "input_path": "/Volumes/dev/00_landing/data/consumer_orders/consumer_order/",
+      "schema": [
+        {"name": "order_id", "type": "IntegerType"},
+        {"name": "consumer_id", "type": "IntegerType"},
+        {"name": "order_date", "type": "StringType"},
+        {"name": "order_status", "type": "StringType"},
+        {"name": "total_amount", "type": "DoubleType"},
+        {"name": "currency", "type": "StringType"},
+        {"name": "payment_method", "type": "StringType"},
+        {"name": "channel", "type": "StringType"},
+        {"name": "billing_address", "type": "StringType"},
+        {"name": "shipping_address", "type": "StringType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["order_status", "currency", "payment_method", "channel", "billing_address", "shipping_address"],
+        "cast_numeric": ["total_amount"],
+        "date_columns": [{"name": "order_date", "format": "yyyy-MM-dd"}],
+        "expectations": ["order_id IS NOT NULL"]
+      }
+    },
+    {
+      "name": "consumer_order_items",
+      "display_name": "Consumer Order Items",
+      "primary_key": ["order_item_id"],
+      "input_path": "/Volumes/dev/00_landing/data/consumer_orders/consumer_order_items/",
+      "schema": [
+        {"name": "order_item_id", "type": "IntegerType"},
+        {"name": "order_id", "type": "IntegerType"},
+        {"name": "product_id", "type": "IntegerType"},
+        {"name": "quantity", "type": "IntegerType"},
+        {"name": "unit_price", "type": "DoubleType"},
+        {"name": "total_price", "type": "DoubleType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "cast_numeric": ["quantity", "unit_price", "total_price"],
+        "expectations": ["order_item_id IS NOT NULL", "order_id IS NOT NULL"]
+      }
+    },
+    {
+      "name": "distributor_sale_order",
+      "display_name": "Distributor Sale Order",
+      "primary_key": ["sales_order_id", "distributor_id"],
+      "input_path": "/Volumes/dev/00_landing/data/distributor_sales_order/sale_order/",
+      "schema": [
+        {"name": "sales_order_id", "type": "IntegerType"},
+        {"name": "distributor_id", "type": "IntegerType"},
+        {"name": "order_date", "type": "StringType"},
+        {"name": "expected_delivery_date", "type": "StringType"},
+        {"name": "order_total_amount", "type": "DoubleType"},
+        {"name": "currency", "type": "StringType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["currency"],
+        "cast_numeric": ["order_total_amount"],
+        "date_columns": [
+          {"name": "order_date", "format": "yyyy-MM-dd"},
+          {"name": "expected_delivery_date", "format": "yyyy-MM-dd"}
+        ],
+        "expectations": ["sales_order_id IS NOT NULL", "distributor_id IS NOT NULL"]
+      }
+    },
+    {
+      "name": "distributor_sale_order_item",
+      "display_name": "Distributor Sale Order Item",
+      "primary_key": ["sales_order_id", "sales_order_item_no", "product_id"],
+      "input_path": "/Volumes/dev/00_landing/data/distributor_sales_order/sale_order_item/",
+      "schema": [
+        {"name": "sales_order_id", "type": "IntegerType"},
+        {"name": "sales_order_item_no", "type": "IntegerType"},
+        {"name": "product_id", "type": "IntegerType"},
+        {"name": "order_quantity", "type": "IntegerType"},
+        {"name": "order_quantity_uom", "type": "StringType"},
+        {"name": "unit_price", "type": "DoubleType"},
+        {"name": "item_total_amount", "type": "DoubleType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["order_quantity_uom"],
+        "cast_numeric": ["order_quantity", "unit_price", "item_total_amount"],
+        "expectations": ["sales_order_id IS NOT NULL", "sales_order_item_no IS NOT NULL"]
+      }
+    },
+    {
+      "name": "distributor_invoice",
+      "display_name": "Distributor Invoice",
+      "primary_key": ["invoice_id"],
+      "input_path": "/Volumes/dev/00_landing/data/distributor_invoice/invoice/",
+      "schema": [
+        {"name": "invoice_id", "type": "IntegerType"},
+        {"name": "invoice_date", "type": "StringType"},
+        {"name": "invoice_total_amount", "type": "DoubleType"},
+        {"name": "currency", "type": "StringType"},
+        {"name": "tax_amount", "type": "DoubleType"},
+        {"name": "invoice_type", "type": "StringType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["currency", "invoice_type"],
+        "cast_numeric": ["invoice_total_amount", "tax_amount"],
+        "date_columns": [{"name": "invoice_date", "format": "yyyy-MM-dd"}],
+        "expectations": ["invoice_id IS NOT NULL"]
+      }
+    },
+    {
+      "name": "distributor_invoice_item",
+      "display_name": "Distributor Invoice Item",
+      "primary_key": ["invoice_id", "invoice_item_no", "product_id"],
+      "input_path": "/Volumes/dev/00_landing/data/distributor_invoice/invoice_item/",
+      "schema": [
+        {"name": "invoice_id", "type": "IntegerType"},
+        {"name": "invoice_item_no", "type": "IntegerType"},
+        {"name": "product_id", "type": "IntegerType"},
+        {"name": "invoiced_quantity", "type": "IntegerType"},
+        {"name": "invoiced_quantity_uom", "type": "StringType"},
+        {"name": "invoice_item_total_amount", "type": "DoubleType"},
+        {"name": "sales_order_id", "type": "IntegerType"},
+        {"name": "sales_order_item_no", "type": "IntegerType"},
+        {"name": "operation", "type": "StringType"}
+      ],
+      "silver_transformations": {
+        "trim_columns": ["invoiced_quantity_uom"],
+        "cast_numeric": ["invoiced_quantity", "invoice_item_total_amount"],
+        "expectations": ["invoice_id IS NOT NULL", "invoice_item_no IS NOT NULL"]
+      }
+    }
+  ],
+  "config": {
+    "catalog": "${var.catalog}",
+    "landing_schema": "00_landing",
+    "bronze_schema": "01_bronze",
+    "silver_schema": "02_silver",
+    "file_format": "json",
+    "cdc_scd_type": "2"
+  }
+}
+
