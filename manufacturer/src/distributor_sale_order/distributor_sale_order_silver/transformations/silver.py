@@ -1,5 +1,5 @@
 from pyspark import pipelines as dp
-from pyspark.sql.functions import col, regexp_replace, when, length, trim, to_date
+from pyspark.sql.functions import col, regexp_replace, when, length, trim, to_date, lit
 
 catalog="dev"
 from_schema="01_bronze"
@@ -26,7 +26,7 @@ def sale_order_item_temp():
     df=df.filter(col("order_quantity") >= 1)
     df=df.withColumn(
         "order_quantity_uom",
-        trim(when(col("order_quantity_uom").isNull(), "NA").otherwise(col("order_quantity_uom")))
+        trim(when(col("order_quantity_uom").isNull(), lit("NA")).otherwise(col("order_quantity_uom")))
     )
     df=df.withColumn(
         "item_total_amount",
