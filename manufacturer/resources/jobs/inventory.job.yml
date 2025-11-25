@@ -3,7 +3,7 @@ resources:
     inventory:
       name: inventory
       trigger:
-        pause_status: UNPAUSED
+        pause_status: PAUSED
         file_arrival:
           url: /Volumes/dev/00_landing/data/inventory/
       tasks:

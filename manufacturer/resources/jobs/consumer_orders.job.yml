@@ -3,7 +3,7 @@ resources:
     consumer_orders:
       name: consumer_orders
       trigger:
-        pause_status: UNPAUSED
+        pause_status: PAUSED
         file_arrival:
           url: /Volumes/dev/00_landing/data/consumer_orders/
       tasks:

@@ -3,7 +3,7 @@ resources:
     distributor_invoice:
       name: distributor_invoice
       trigger:
-        pause_status: UNPAUSED
+        pause_status: PAUSED
         file_arrival:
           url: /Volumes/dev/00_landing/data/distributor_invoice/
       tasks:

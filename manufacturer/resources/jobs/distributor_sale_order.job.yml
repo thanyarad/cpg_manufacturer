@@ -3,7 +3,7 @@ resources:
     distributor_sale_order:
       name: distributor_sale_order
       trigger:
-        pause_status: UNPAUSED
+        pause_status: PAUSED
         file_arrival:
           url: /Volumes/dev/00_landing/data/distributor_sales_order/
       tasks:
