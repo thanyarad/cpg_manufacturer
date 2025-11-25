@@ -2,17 +2,6 @@ from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 from pyspark.sql.functions import current_timestamp, col, expr
 
-# distributor invoice
-# {
-#         "invoice_id": 1,
-#         "invoice_date": "2024-11-26",
-#         "invoice_total_amount": 1975.0,
-#         "currency": "USD",
-#         "tax_amount": 158.0,
-#         "invoice_type": "Standard",
-#         "operation": "insert"
-# }
-
 distributor_invoice_schema=StructType([
     StructField("invoice_id", IntegerType()),
     StructField("invoice_date", StringType()),

@@ -1,20 +1,10 @@
 from pyspark import pipelines as dp
-from pyspark.sql.functions import col, regexp_replace, when, length, trim, to_date, lit
+from pyspark.sql.functions import col, when, trim, to_date, lit
 
 catalog="dev"
 from_schema="01_bronze"
 to_schema="02_silver"
 
-# distributor invoice (distributor_invoice_mv)
-# {
-# "invoice_id": 1,
-# "invoice_date": "2024-11-26",
-# "invoice_total_amount": 1975.0,
-# "currency": "USD",
-# "tax_amount": 158.0,
-# "invoice_type": "Standard",
-# "operation": "insert"
-# }
 @dp.expect_or_drop("valid_invoice","invoice_id IS NOT NULL")
 @dp.expect_or_drop("positive_amounts", "invoice_total_amount > 0 AND tax_amount >= 0")
 @dp.temporary_view(name="invoice_temp")
@@ -23,24 +13,9 @@ def invoice_temp():
     df=df.withColumn("invoice_date",to_date(col("invoice_date"),"yyyy-MM-dd"))
     string_col=["currency","invoice_type"]
     for i in string_col:
-        df=df.withColumn(
-            i,
-            trim(when(col(i).isNull(), lit("NA")).otherwise(col(i))
-        )
+        df=df.withColumn(i,trim(when(col(i).isNull(), lit("NA")).otherwise(col(i))))
     return df
 
-# distributor invoice item (distributor_invoice_item_mv)
-# {
-# "invoice_id": 1,
-# "invoice_item_no": 1,
-# "product_id": 1,
-# "invoiced_quantity": 500,
-# "invoiced_quantity_uom": "units",
-# "invoice_item_total_amount": 945.0,
-# "sales_order_id": 1,
-# "sales_order_item_no": 1,
-# "operation": "insert"
-# }
 @dp.expect_all_or_drop({
     "valid_invoice" : "invoice_id is NOT NULL",
     "valid_invoice_item": "invoice_item_no is NOT NULL",
@@ -53,10 +28,7 @@ def invoice_item_temp():
     df=spark.read.table(f"{catalog}.{from_schema}.distributor_invoice_item_mv")
     df=df.filter(col("invoiced_quantity") >= 1)
     df=df.filter(col("invoice_item_total_amount") > 0)
-    df=df.withColumn(
-        "invoiced_quantity_uom",
-        trim(when(col("invoiced_quantity_uom").isNull(), lit("NA")).otherwise(col("invoiced_quantity_uom")))
-    )
+    df=df.withColumn("invoiced_quantity_uom", trim(when(col("invoiced_quantity_uom").isNull(), lit("NA")).otherwise(col("invoiced_quantity_uom"))))
     return df
 
 @dp.materialized_view(name=f"{catalog}.{to_schema}.distributor_sale_order_mv")

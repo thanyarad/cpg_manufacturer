@@ -2,18 +2,6 @@ from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 from pyspark.sql.functions import current_timestamp, col, expr
 
-# sale order item
-# {
-#         "sales_order_id": 1,
-#         "sales_order_item_no": 1,
-#         "product_id": 1,
-#         "order_quantity": 500,
-#         "order_quantity_uom": "units",
-#         "unit_price": 1.89,
-#         "item_total_amount": 945.0,
-#         "operation": "insert"
-# }
-
 distributor_sale_order_item_schema=StructType([
     StructField("sales_order_id", IntegerType()),
     StructField("sales_order_item_no", IntegerType()),
