@@ -19,5 +19,5 @@ resources:
             notebook_path: ../../src/gold_sales/gold.ipynb
       queue:
         enabled: true
-      performance_target: STANDARD
+      performance_target: PERFORMANCE_OPTIMIZED
 

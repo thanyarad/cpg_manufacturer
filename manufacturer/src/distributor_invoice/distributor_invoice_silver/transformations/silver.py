@@ -31,8 +31,8 @@ def invoice_item_temp():
     df=df.withColumn("invoiced_quantity_uom", trim(when(col("invoiced_quantity_uom").isNull(), lit("NA")).otherwise(col("invoiced_quantity_uom"))))
     return df
 
-@dp.materialized_view(name=f"{catalog}.{to_schema}.distributor_sale_order_mv")
-def distributor_mv():
+@dp.materialized_view(name=f"{catalog}.{to_schema}.distributor_invoice_mv")
+def distributor_invoice_mv():
     invoice_temp()
     invoice_item_temp()
     df_joined=spark.sql(f""" 
