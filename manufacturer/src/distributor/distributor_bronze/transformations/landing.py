@@ -26,7 +26,6 @@ def distributor_raw_stream():
         .format("cloudFiles")
         .option("cloudFiles.format", "json")
         .schema(distributor_schema)
-        # .option("multiLine", "true")
         .load(input_file_path)
         .withColumn("ingestion_time", current_timestamp())
   )

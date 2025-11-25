@@ -2,17 +2,6 @@ from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 from pyspark.sql.functions import current_timestamp, col, expr
 
-# sale order
-# {
-#         "sales_order_id": 1,
-#         "distributor_id": 1,
-#         "order_date": "2024-11-09",
-#         "expected_delivery_date": "2024-11-25",
-#         "order_total_amount": 1975.0,
-#         "currency": "USD",
-#         "operation": "insert"
-# }
-
 distributor_sale_order_schema=StructType([
     StructField("sales_order_id", IntegerType()),
     StructField("distributor_id", IntegerType()),
@@ -35,7 +24,6 @@ def distributor_sale_order_raw_stream():
         .format("cloudFiles")
         .option("cloudFiles.format", "json")
         .schema(distributor_sale_order_schema)
-        # .option("multiLine", "true")
         .load(input_file_path)
         .withColumn("ingestion_time", current_timestamp())
   )

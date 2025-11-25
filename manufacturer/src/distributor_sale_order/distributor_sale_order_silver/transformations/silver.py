@@ -1,5 +1,5 @@
 from pyspark import pipelines as dp
-from pyspark.sql.functions import col, regexp_replace, when, length, trim, to_date, lit
+from pyspark.sql.functions import col, when, trim, to_date, lit
 
 catalog="dev"
 from_schema="01_bronze"
@@ -59,23 +59,3 @@ def distributor_mv():
         ON so.sales_order_id = soi.sales_order_id
     """)
     return df_joined
-
-# sale order
-# {
-#         "sales_order_id": 1,
-#         "distributor_id": 1,
-#         "order_date": "2024-11-09",
-#         "expected_delivery_date": "2024-11-25",
-#         "order_total_amount": 1975.0,
-#         "currency": "USD",
-#         "operation": "insert"
-# }
-# sale order item
-# "sales_order_id": 1,
-#         "sales_order_item_no": 1,
-#         "product_id": 1,
-#         "order_quantity": 500,
-#         "order_quantity_uom": "units",
-#         "unit_price": 1.89,
-#         "item_total_amount": 945.0,
-#         "operation": "insert"
