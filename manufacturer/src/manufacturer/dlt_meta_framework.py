@@ -1,7 +1,14 @@
 from pyspark import pipelines as dp
+from pyspark.sql import SparkSession
 from pyspark.sql.functions import current_timestamp, col, expr, trim, regexp_replace, when, length, to_date, lit, to_timestamp
 from pyspark.sql.types import DoubleType, IntegerType, BooleanType
-from .metadata import METADATA
+from manufacturer.metadata import METADATA
+
+def get_spark():
+    spark = SparkSession.getActiveSession()
+    if spark is None:
+        spark = SparkSession.builder.getOrCreate()
+    return spark
 
 def create_landing_pipeline(entity_key: str, catalog: str = "dev", schema: str = "00_landing"):
     entity_meta = METADATA[entity_key]
@@ -22,6 +29,7 @@ def create_landing_pipeline(entity_key: str, catalog: str = "dev", schema: str =
     
     @dp.append_flow(target=raw_stream_name)
     def raw_stream():
+        spark = get_spark()
         return (
             spark.readStream
                 .format("cloudFiles")
@@ -51,6 +59,7 @@ def create_bronze_pipeline(entity_key: str, catalog: str = "dev", from_schema: s
     
     @dp.materialized_view(name=mv_name)
     def bronze_mv():
+        spark = get_spark()
         df = spark.read.table(source_table)
         cols = [c for c in df.columns if not c.startswith("__")]
         return df.select(*cols).filter(col("__END_AT").isNull()).drop("operation", "ingestion_time")
@@ -80,6 +89,7 @@ def create_silver_pipeline(entity_key: str, catalog: str = "dev", from_schema: s
     @apply_decorators
     @dp.materialized_view(name=mv_name)
     def silver_mv():
+        spark = get_spark()
         df = spark.read.table(source_table)
         
         if "trim_columns" in transformations:
@@ -216,6 +226,7 @@ def create_joined_silver_pipeline(entity_keys: list, join_config: dict, catalog:
             @apply_decorators
             @dp.temporary_view(name=f"{entity_name}_temp")
             def temp_view():
+                spark = get_spark()
                 df = spark.read.table(source_table)
                 
                 if "trim_columns" in transformations:
@@ -262,6 +273,7 @@ def create_joined_silver_pipeline(entity_keys: list, join_config: dict, catalog:
     
     @dp.materialized_view(name=mv_name)
     def joined_mv():
+        spark = get_spark()
         for temp_view_func in temp_view_funcs:
             temp_view_func()
         joined_df = spark.sql(join_config["join_sql"])

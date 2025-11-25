@@ -10,5 +10,5 @@ resources:
       serverless: true
       catalog: dev
       schema: 00_landing
-      root_path: ../../../src/consumer/consumer_bronze
+      root_path: ../../../src
 

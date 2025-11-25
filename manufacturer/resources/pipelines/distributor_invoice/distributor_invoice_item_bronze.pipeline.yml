@@ -10,4 +10,4 @@ resources:
       serverless: true
       catalog: dev
       schema: 01_bronze
-      root_path: ../../../src/distributor_invoice/distributor_invoice_item_bronze
+      root_path: ../../../src

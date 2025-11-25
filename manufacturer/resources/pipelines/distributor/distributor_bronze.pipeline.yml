@@ -10,4 +10,4 @@ resources:
       serverless: true
       catalog: dev
       schema: 00_landing
-      root_path: ../../../src/distributor/distributor_bronze
+      root_path: ../../../src

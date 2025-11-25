@@ -10,6 +10,6 @@ resources:
       serverless: true
       catalog: dev
       schema: 02_silver
-      root_path: ../../../src/distributor_invoice/distributor_invoice_silver
+      root_path: ../../../src
 
       # /Workspace/Users/mugunthan2783@gmail.com/cpg_manufacturer/manufacturer/src/distributor_invoice/distributor_invoice_silver/transformations
