@@ -3,9 +3,9 @@ resources:
     distributor_sale_order_silver:
       name: distributor_sale_order_silver
       libraries:
-        - glob:
-            include: ../../../src/distributor_sale_order/distributor_sale_order_silver/transformations/**
+      - glob:
+          include: ../../../src/distributor_sale_order/distributor_sale_order_silver/transformations/**
       serverless: true
-      catalog: dev
+      catalog: ${var.catalog}
       schema: 02_silver
       root_path: ../../../src/distributor_sale_order/distributor_sale_order_silver

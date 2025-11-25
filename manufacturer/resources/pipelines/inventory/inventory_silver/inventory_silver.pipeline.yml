@@ -1,0 +1,11 @@
+resources:
+  pipelines:
+    inventory_silver:
+      name: inventory_silver
+      libraries:
+      - glob:
+          include: ../../../src/inventory/inventory_silver/transformations/**
+      serverless: true
+      catalog: ${var.catalog}
+      schema: 02_silver
+      root_path: ../../../src/inventory/inventory_silver

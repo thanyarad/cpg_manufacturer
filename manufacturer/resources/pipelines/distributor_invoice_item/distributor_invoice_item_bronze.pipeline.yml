@@ -1,0 +1,11 @@
+resources:
+  pipelines:
+    distributor_invoice_item_bronze:
+      name: distributor_invoice_item_bronze
+      libraries:
+      - glob:
+          include: ../../../src/distributor_invoice_item/distributor_invoice_item_bronze/transformations/**
+      serverless: true
+      catalog: ${var.catalog}
+      schema: 00_landing
+      root_path: ../../../src/distributor_invoice_item/distributor_invoice_item_bronze

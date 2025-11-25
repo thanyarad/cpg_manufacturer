@@ -1,0 +1,11 @@
+resources:
+  pipelines:
+    distributor_silver:
+      name: distributor_silver
+      libraries:
+      - glob:
+          include: ../../../src/distributor/distributor_silver/transformations/**
+      serverless: true
+      catalog: ${var.catalog}
+      schema: 02_silver
+      root_path: ../../../src/distributor/distributor_silver

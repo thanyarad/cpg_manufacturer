@@ -1,0 +1,11 @@
+resources:
+  pipelines:
+    distributor_sale_order_item_bronze:
+      name: distributor_sale_order_item_bronze
+      libraries:
+      - glob:
+          include: ../../../src/distributor_sale_order_item/distributor_sale_order_item_bronze/transformations/**
+      serverless: true
+      catalog: ${var.catalog}
+      schema: 00_landing
+      root_path: ../../../src/distributor_sale_order_item/distributor_sale_order_item_bronze

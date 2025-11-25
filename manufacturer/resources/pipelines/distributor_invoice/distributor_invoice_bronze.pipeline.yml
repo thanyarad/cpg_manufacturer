@@ -3,11 +3,9 @@ resources:
     distributor_invoice_bronze:
       name: distributor_invoice_bronze
       libraries:
-        - glob:
-            include: ../../../src/distributor_invoice/distributor_invoice_bronze/transformations/**
+      - glob:
+          include: ../../../src/distributor_invoice/distributor_invoice_bronze/transformations/**
       serverless: true
-      catalog: dev
+      catalog: ${var.catalog}
       schema: 00_landing
       root_path: ../../../src/distributor_invoice/distributor_invoice_bronze
-
-# /Workspace/Users/mugunthan2783@gmail.com/cpg_manufacturer/manufacturer/src/distributor_invoice/distributor_invoice_bronze/transformations

@@ -1,0 +1,11 @@
+resources:
+  pipelines:
+    consumer_order_bronze:
+      name: consumer_order_bronze
+      libraries:
+      - glob:
+          include: ../../../src/consumer_order/consumer_order_bronze/transformations/**
+      serverless: true
+      catalog: ${var.catalog}
+      schema: 00_landing
+      root_path: ../../../src/consumer_order/consumer_order_bronze

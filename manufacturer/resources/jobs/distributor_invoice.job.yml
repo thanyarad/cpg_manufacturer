@@ -5,22 +5,22 @@ resources:
       trigger:
         pause_status: PAUSED
         file_arrival:
-          url: /Volumes/dev/00_landing/data/distributor_invoice/
+          url: /Volumes/dev/00_landing/data/distributor_invoice/invoice
       tasks:
+      - task_key: distributor_invoice_bronze
+        pipeline_task:
+          pipeline_id: ${resources.pipelines.distributor_invoice_bronze.id}
+          full_refresh: false
+      - task_key: distributor_invoice_item_bronze
+        pipeline_task:
+          pipeline_id: ${resources.pipelines.distributor_invoice_item_bronze.id}
+          full_refresh: false
+      - task_key: distributor_invoice_silver
+        depends_on:
         - task_key: distributor_invoice_bronze
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.distributor_invoice_bronze.id}
-            full_refresh: false
         - task_key: distributor_invoice_item_bronze
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.distributor_invoice_item_bronze.id}
-            full_refresh: false
-        - task_key: distributor_invoice_silver
-          depends_on:
-            - task_key: distributor_invoice_bronze
-            - task_key: distributor_invoice_item_bronze
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.distributor_invoice_silver.id}
+        pipeline_task:
+          pipeline_id: ${resources.pipelines.distributor_invoice_silver.id}
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED

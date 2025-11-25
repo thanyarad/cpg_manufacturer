@@ -6,7 +6,7 @@ resources:
         - glob:
             include: ../../../src/product/product_silver/transformations/**
       serverless: true
-      catalog: dev
+      catalog: ${var.catalog}
       schema: 02_silver
       root_path: ../../../src/product/product_silver
 

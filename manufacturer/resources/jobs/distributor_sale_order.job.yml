@@ -5,25 +5,22 @@ resources:
       trigger:
         pause_status: PAUSED
         file_arrival:
-          url: /Volumes/dev/00_landing/data/distributor_sales_order/
+          url: /Volumes/dev/00_landing/data/distributor_sales_order/sale_order
       tasks:
+      - task_key: distributor_sale_order_bronze
+        pipeline_task:
+          pipeline_id: ${resources.pipelines.distributor_sale_order_bronze.id}
+          full_refresh: false
+      - task_key: distributor_sale_order_item_bronze
+        pipeline_task:
+          pipeline_id: ${resources.pipelines.distributor_sale_order_item_bronze.id}
+          full_refresh: false
+      - task_key: distributor_sale_order_silver
+        depends_on:
         - task_key: distributor_sale_order_bronze
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.distributor_sale_order_bronze.id}
-            full_refresh: false
         - task_key: distributor_sale_order_item_bronze
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.distributor_sale_order_item_bronze.id}
-            full_refresh: false
-        - task_key: distributor_sale_order_silver
-          depends_on:
-            - task_key: distributor_sale_order_bronze
-            - task_key: distributor_sale_order_item_bronze
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.distributor_sale_order_silver.id}
+        pipeline_task:
+          pipeline_id: ${resources.pipelines.distributor_sale_order_silver.id}
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED
-      # email_notifications:
-      #   on_failure:
-      #     - mugunthan2783@gmail.com

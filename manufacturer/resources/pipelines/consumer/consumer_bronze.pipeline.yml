@@ -3,10 +3,9 @@ resources:
     consumer_bronze:
       name: consumer_bronze
       libraries:
-        - glob:
-            include: ../../../src/consumer/consumer_bronze/transformations/**
+      - glob:
+          include: ../../../src/consumer/consumer_bronze/transformations/**
       serverless: true
-      catalog: dev
+      catalog: ${var.catalog}
       schema: 00_landing
       root_path: ../../../src/consumer/consumer_bronze
-

@@ -3,9 +3,9 @@ resources:
     distributor_bronze:
       name: distributor_bronze
       libraries:
-        - glob:
-            include: ../../../src/distributor/distributor_bronze/transformations/**
+      - glob:
+          include: ../../../src/distributor/distributor_bronze/transformations/**
       serverless: true
-      catalog: dev
+      catalog: ${var.catalog}
       schema: 00_landing
       root_path: ../../../src/distributor/distributor_bronze

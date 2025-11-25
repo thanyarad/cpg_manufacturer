@@ -5,18 +5,17 @@ resources:
       trigger:
         pause_status: PAUSED
         file_arrival:
-          url: /Volumes/dev/00_landing/data/product/
+          url: /Volumes/dev/00_landing/data/product
       tasks:
+      - task_key: product_bronze
+        pipeline_task:
+          pipeline_id: ${resources.pipelines.product_bronze.id}
+          full_refresh: false
+      - task_key: product_silver
+        depends_on:
         - task_key: product_bronze
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.product_bronze.id}
-            full_refresh: false
-        - task_key: product_silver
-          depends_on:
-            - task_key: product_bronze
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.product_silver.id}
+        pipeline_task:
+          pipeline_id: ${resources.pipelines.product_silver.id}
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED
-

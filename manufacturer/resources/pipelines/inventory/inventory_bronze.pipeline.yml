@@ -3,9 +3,9 @@ resources:
     inventory_bronze:
       name: inventory_bronze
       libraries:
-        - glob:
-            include: ../../../src/inventory/inventory_bronze/transformations/**
+      - glob:
+          include: ../../../src/inventory/inventory_bronze/transformations/**
       serverless: true
-      catalog: dev
+      catalog: ${var.catalog}
       schema: 00_landing
       root_path: ../../../src/inventory/inventory_bronze

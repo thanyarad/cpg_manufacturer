@@ -1,0 +1,11 @@
+resources:
+  pipelines:
+    product_silver:
+      name: product_silver
+      libraries:
+      - glob:
+          include: ../../../src/product/product_silver/transformations/**
+      serverless: true
+      catalog: ${var.catalog}
+      schema: 02_silver
+      root_path: ../../../src/product/product_silver

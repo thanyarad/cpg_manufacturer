@@ -1,0 +1,3 @@
+from manufacturer.transformations.silver_template import create_silver_pipeline
+
+create_silver_pipeline("distributor_invoice_item")
