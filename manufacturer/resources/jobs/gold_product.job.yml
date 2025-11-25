@@ -1,0 +1,21 @@
+resources:
+  jobs:
+    gold_product:
+      name: gold_product
+      trigger:
+        pause_status: PAUSED
+        table_update:
+          table_names:
+            - dev.02_silver.distributor_invoice_mv
+            - dev.02_silver.distributor_sale_order_mv
+            - dev.02_silver.product_mv
+            - dev.02_silver.consumer_orders_mv
+          condition: ANY_UPDATED
+      tasks:
+        - task_key: gold_product_notebook
+          notebook_task:
+            notebook_path: ../../src/gold_product/product_sales
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+ 
