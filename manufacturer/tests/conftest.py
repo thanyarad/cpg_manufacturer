@@ -5,14 +5,27 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType, 
 
 @pytest.fixture(scope="session")
 def spark():
+    try:
+        spark_session = SparkSession.getActiveSession()
+        if spark_session is not None:
+            return spark_session
+    except:
+        pass
+    
     spark_session = SparkSession.builder \
         .appName("distributor_tests") \
-        .master("local[2]") \
+        .master("local[1]") \
         .config("spark.sql.adaptive.enabled", "false") \
         .config("spark.sql.adaptive.coalescePartitions.enabled", "false") \
         .getOrCreate()
+    
     yield spark_session
-    spark_session.stop()
+    
+    try:
+        if SparkSession.getActiveSession() != spark_session:
+            spark_session.stop()
+    except:
+        pass
 
 
 @pytest.fixture
