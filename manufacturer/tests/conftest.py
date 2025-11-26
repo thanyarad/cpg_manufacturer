@@ -1,3 +1,6 @@
+import sys
+sys.dont_write_bytecode = True
+
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType, BooleanType
