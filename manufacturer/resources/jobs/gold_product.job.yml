@@ -14,7 +14,7 @@ resources:
       tasks:
         - task_key: gold_product_notebook
           notebook_task:
-            notebook_path: ../../src/gold_product/product_sales
+            notebook_path: ../../src/gold_product/product_sales.ipynb
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED
