@@ -4,6 +4,10 @@ bundle:
   name: manufacturer
   uuid: 0cddd31f-0c85-4c6e-93e6-195970861549
 
+# scripts:
+#   post_deploy:
+#     content: databricks jobs run-now --job-id ${resources.jobs.initial.id}
+
 include:
   - resources/*.yml
   - resources/*/*.yml
@@ -20,7 +24,9 @@ variables:
     # default: dev
     default: ${bundle.target}
   schema: 
-    description: onnum illa
+    description: The schema to be used.
+  input_volume:
+    default: data
   landing:
     default: 00_landing
   bronze:
@@ -50,6 +56,8 @@ targets:
       schema: dev
   prod:
     mode: production
+    presets:
+      name_prefix: 'prod_'
     workspace:
       # host: https://dbc-dcffaa68-27b1.cloud.databricks.com
       # We explicitly deploy to /Workspace/Users/thanyarkottary2003@gmail.com to make sure we only have a single copy.

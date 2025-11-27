@@ -17,7 +17,6 @@ resources:
             notebook_path: ../../src/gold_product/gold.ipynb
             base_parameters:
               catalog: ${var.catalog}
-              # catalog: testing
               silver_schema: ${var.silver}
               gold_schema: ${var.gold_product}
       queue:

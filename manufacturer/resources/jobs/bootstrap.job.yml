@@ -1,11 +1,21 @@
 resources:
   jobs:
-    initial:
-      name: initial
+    bootstrap:
+      name: bootstrap
       tasks:
+        - task_key: task0
+          notebook_task:
+            notebook_path: ../../src/bootstrap/setup.ipynb
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.landing}
+              volume: ${var.input_volume}
+            source: WORKSPACE
         # - task_key: task1
         #   run_job_task:
         #     job_id: ${resources.jobs.consumer.id} 
+        #   depends_on:
+        #     - task_key: task0
         # - task_key: task2
         #   depends_on:
         #     - task_key: task1
@@ -40,7 +50,7 @@ resources:
           # depends_on:
           #   - task_key: task7
           notebook_task:
-            notebook_path: ../../src/intial/Initial_setup.ipynb
+            notebook_path: ../../src/bootstrap/trigger_update.ipynb
             source: WORKSPACE
       queue:
         enabled: true
