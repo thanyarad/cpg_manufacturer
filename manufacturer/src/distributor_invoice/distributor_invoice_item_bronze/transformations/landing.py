@@ -20,7 +20,7 @@ distributor_invoice_item_schema=StructType([
     StructField("invoice_item_no", IntegerType()),
     StructField("product_id", IntegerType()),
     StructField("invoiced_quantity", IntegerType()),
-    StructField("invoiced_quantity_uom", StringType())
+    StructField("invoiced_quantity_uom", StringType()),
     StructField("invoice_item_total_amount", DoubleType()),
     StructField("sales_order_id", IntegerType()),
     StructField("sales_order_item_no", IntegerType()),

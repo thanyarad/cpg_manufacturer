@@ -1,7 +1,7 @@
 resources:
   jobs:
     gold_supply:
-      name: Gold Supply
+      name: gold_supply
       trigger:
         pause_status: PAUSED
         table_update:
@@ -17,6 +17,10 @@ resources:
         - task_key: gold_supply_notebook
           notebook_task:
             notebook_path: ../../src/gold_supply/gold.ipynb
+            base_parameters:
+              catalog: ${var.catalog}
+              silver_schema: ${var.silver}
+              gold_schema: ${var.gold_product}
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED

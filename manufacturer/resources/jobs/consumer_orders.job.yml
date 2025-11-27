@@ -12,12 +12,13 @@ resources:
             pipeline_id: ${resources.pipelines.consumer_order_bronze.id}
             full_refresh: false
         - task_key: consumer_order_items_bronze
+          depends_on:
+            - task_key: consumer_order_bronze
           pipeline_task:
             pipeline_id: ${resources.pipelines.consumer_order_items_bronze.id}
             full_refresh: false
         - task_key: consumer_orders_silver
           depends_on:
-            - task_key: consumer_order_bronze
             - task_key: consumer_order_items_bronze
           pipeline_task:
             pipeline_id: ${resources.pipelines.consumer_orders_silver.id}
