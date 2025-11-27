@@ -20,7 +20,7 @@ resources:
             base_parameters:
               catalog: ${var.catalog}
               silver_schema: ${var.silver}
-              gold_schema: ${var.gold_product}
+              gold_schema: ${var.gold_supply}
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED
