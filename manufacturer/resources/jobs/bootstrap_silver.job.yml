@@ -1,0 +1,45 @@
+resources:
+  jobs:
+    bootstrap_silver:
+      name: Bootstrap Silver MVs
+      tasks:
+        - task_key: run_product_job
+          run_job_task:
+            job_id: ${resources.jobs.product.id}
+        - task_key: run_inventory_job
+          run_job_task:
+            job_id: ${resources.jobs.inventory.id}
+        - task_key: run_consumer_job
+          run_job_task:
+            job_id: ${resources.jobs.consumer.id}
+        - task_key: run_consumer_orders_job
+          run_job_task:
+            job_id: ${resources.jobs.consumer_orders.id}
+        - task_key: run_distributor_job
+          run_job_task:
+            job_id: ${resources.jobs.distributor.id}
+        - task_key: run_distributor_sale_order_job
+          depends_on:
+            - task_key: run_product_job
+          run_job_task:
+            job_id: ${resources.jobs.distributor_sale_order.id}
+        - task_key: run_distributor_invoice_job
+          depends_on:
+            - task_key: run_inventory_job
+          run_job_task:
+            job_id: ${resources.jobs.distributor_invoice.id}
+        - task_key: unpause_gold_jobs
+          depends_on:
+            - task_key: run_product_job
+            - task_key: run_inventory_job
+            - task_key: run_consumer_job
+            - task_key: run_consumer_orders_job
+            - task_key: run_distributor_job
+            - task_key: run_distributor_sale_order_job
+            - task_key: run_distributor_invoice_job
+          notebook_task:
+            notebook_path: ../../src/bootstrap/unpause_gold_jobs
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+

@@ -1,7 +1,7 @@
 resources:
   jobs:
     gold_supply:
-      name: Gold Supply
+      name: gold_supply
       trigger:
         pause_status: PAUSED
         table_update:
