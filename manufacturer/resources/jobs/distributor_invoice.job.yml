@@ -12,12 +12,13 @@ resources:
             pipeline_id: ${resources.pipelines.distributor_invoice_bronze.id}
             full_refresh: false
         - task_key: distributor_invoice_item_bronze
+          depends_on:
+            - task_key: distributor_invoice_bronze
           pipeline_task:
             pipeline_id: ${resources.pipelines.distributor_invoice_item_bronze.id}
             full_refresh: false
         - task_key: distributor_invoice_silver
           depends_on:
-            - task_key: distributor_invoice_bronze
             - task_key: distributor_invoice_item_bronze
           pipeline_task:
             pipeline_id: ${resources.pipelines.distributor_invoice_silver.id}

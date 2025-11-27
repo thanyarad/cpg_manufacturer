@@ -14,7 +14,12 @@ resources:
       tasks:
         - task_key: gold_product_notebook
           notebook_task:
-            notebook_path: ../../src/gold_product/product_sales.ipynb
+            notebook_path: ../../src/gold_product/gold.ipynb
+            base_parameters:
+              catalog: ${var.catalog}
+              # catalog: testing
+              silver_schema: ${var.silver}
+              gold_schema: ${var.gold_product}
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED
