@@ -55,6 +55,10 @@ targets:
     variables:
       # catalog: dev
       # schema: demo
+  testing:
+    mode: development 
+    presets:
+      name_prefix: "[${bundle.target} ${workspace.current_user.short_name}]"
   prod:
     mode: production
     presets:
