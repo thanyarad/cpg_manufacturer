@@ -6,8 +6,12 @@ resources:
         - glob:
             include: ../../../src/distributor_invoice/distributor_invoice_item_bronze/transformations/**
       serverless: true
-      catalog: dev
-      schema: 00_landing
+      catalog: ${var.catalog}
+      schema: ${var.landing}
       root_path: ../../../src/distributor_invoice/distributor_invoice_item_bronze
-
+      configuration:
+        catalog: ${var.catalog}
+        pipeline_schema: ${var.landing}
+        target_schema: ${var.bronze}
+        volume: ${var.input_volume}
       # /Workspace/Users/mugunthan2783@gmail.com/cpg_manufacturer/manufacturer/src/distributor_invoice/distributor_invoice_item_bronze/transformations

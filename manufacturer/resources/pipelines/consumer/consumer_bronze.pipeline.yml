@@ -14,4 +14,3 @@ resources:
         pipeline_schema: ${var.landing}
         target_schema: ${var.bronze}
         volume: ${var.input_volume}
-

@@ -6,6 +6,9 @@ resources:
         - glob:
             include: ../../../src/inventory/inventory_silver/transformations/**
       serverless: true
-      catalog: dev
-      schema: 02_silver
+      catalog: ${var.catalog}
+      schema: ${var.bronze}
       root_path: ../../../src/inventory/inventory_silver
+      configuration:
+        catalog: ${var.catalog}
+        target_schema: ${var.silver}

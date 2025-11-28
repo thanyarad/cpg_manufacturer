@@ -1,15 +1,17 @@
 from pyspark import pipelines as dp
 from pyspark.sql.functions import col, when, trim, to_date, lit
 
-catalog="dev"
-from_schema="01_bronze"
-to_schema="02_silver"
+# catalog="dev"
+# from_schema="01_bronze"
+# to_schema="02_silver"
+catalog_config = spark.conf.get("catalog")
+schema_config = spark.conf.get("target_schema")
 
 @dp.expect_or_drop("valid_invoice","invoice_id IS NOT NULL")
 @dp.expect_or_drop("positive_amounts", "invoice_total_amount > 0 AND tax_amount >= 0")
 @dp.temporary_view(name="invoice_temp")
 def invoice_temp():
-    df=spark.read.table(f"{catalog}.{from_schema}.distributor_invoice_mv")
+    df=spark.read.table("distributor_invoice_mv")
     df=df.withColumn("invoice_date",to_date(col("invoice_date"),"yyyy-MM-dd"))
     string_col=["currency","invoice_type"]
     for i in string_col:
@@ -25,13 +27,13 @@ def invoice_temp():
 })
 @dp.temporary_view(name=f"invoice_item_temp")
 def invoice_item_temp():
-    df=spark.read.table(f"{catalog}.{from_schema}.distributor_invoice_item_mv")
+    df=spark.read.table("distributor_invoice_item_mv")
     df=df.filter(col("invoiced_quantity") >= 1)
     df=df.filter(col("invoice_item_total_amount") > 0)
     df=df.withColumn("invoiced_quantity_uom", trim(when(col("invoiced_quantity_uom").isNull(), lit("NA")).otherwise(col("invoiced_quantity_uom"))))
     return df
 
-@dp.materialized_view(name=f"{catalog}.{to_schema}.distributor_invoice_mv")
+@dp.materialized_view(name=f"{catalog_config}.{schema_config}.distributor_invoice_mv")
 def distributor_invoice_mv():
     invoice_temp()
     invoice_item_temp()
