@@ -11,15 +11,16 @@ from pyspark.sql.functions import (
 )
 from pyspark.sql.types import IntegerType, BooleanType
 
-catalog = "dev"
-from_schema = "01_bronze"
-to_schema = "02_silver"
+# catalog = "dev"
+# from_schema = "01_bronze"
+# to_schema = "02_silver"
+catalog_config = spark.conf.get("catalog")
+schema_config = spark.conf.get("target_schema")
 
-
-@dp.materialized_view(name=f"{catalog}.{to_schema}.inventory_mv")
+@dp.materialized_view(name=f"{catalog_config}.{schema_config}.inventory_mv")
 @dp.expect_or_drop("valid_inventory", "inventory_id IS NOT NULL")
 def inventory_mv():
-    df = spark.read.table(f"{catalog}.{from_schema}.inventory_mv")
+    df = spark.read.table("inventory_mv")
 
     # Trim common string columns
     string_cols = [

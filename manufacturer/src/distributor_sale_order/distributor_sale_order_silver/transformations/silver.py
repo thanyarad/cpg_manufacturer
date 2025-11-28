@@ -1,17 +1,19 @@
 from pyspark import pipelines as dp
 from pyspark.sql.functions import col, when, trim, to_date, lit
 
-catalog="dev"
-from_schema="01_bronze"
-to_schema="02_silver"
+# catalog="dev"
+# from_schema="01_bronze"
+# to_schema="02_silver"
+catalog_config = spark.conf.get("catalog")
+schema_config = spark.conf.get("target_schema")
 
 @dp.expect_all_or_drop({
     "valid_distributor": "distributor_id IS NOT NULL",
     "valid_sales_order" : "sales_order_id IS NOT NULL"
 })
-@dp.temporary_view(name=f"sale_order_temp")
+@dp.temporary_view(name="sale_order_temp")
 def sale_order_temp():
-    df=spark.read.table(f"{catalog}.{from_schema}.distributor_sale_order_mv")
+    df=spark.read.table("distributor_sale_order_mv")
     df=df.withColumn("order_date",to_date(col("order_date"),"yyyy-MM-dd"))
     df=df.withColumn("expected_delivery_date",to_date(col("expected_delivery_date"),"yyyy-MM-dd"))
     return df
@@ -20,9 +22,9 @@ def sale_order_temp():
     "valid_sales_order" : "sales_order_id is NOT NULL",
     "valid_sales_order_item": "sales_order_item_no is NOT NULL"
 })
-@dp.temporary_view(name=f"sale_order_item_temp")
+@dp.temporary_view(name="sale_order_item_temp")
 def sale_order_item_temp():
-    df=spark.read.table(f"{catalog}.{from_schema}.distributor_sale_order_item_mv")
+    df=spark.read.table("distributor_sale_order_item_mv")
     df=df.filter(col("order_quantity") >= 1)
     df=df.withColumn(
         "order_quantity_uom",
@@ -37,7 +39,7 @@ def sale_order_item_temp():
     )
     return df
 
-@dp.materialized_view(name=f"{catalog}.{to_schema}.distributor_sale_order_mv")
+@dp.materialized_view(name=f"{catalog_config}.{schema_config}.distributor_sale_order_mv")
 def distributor_mv():
     sale_order_temp()
     sale_order_item_temp()

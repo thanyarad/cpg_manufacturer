@@ -25,11 +25,17 @@ inventory_schema = StructType([
   StructField("operation", StringType())
 ])
 
-input_file_path = r"/Volumes/dev/00_landing/data/inventory/"
-catalog="dev"
-schema="00_landing"
+# input_file_path = r"/Volumes/dev/00_landing/data/inventory/"
+# catalog="dev"
+# schema="00_landing"
+catalog_config=spark.conf.get("catalog")
+schema_config=spark.conf.get("pipeline_schema")
+volume_config=spark.conf.get("volume")
 
-dp.create_streaming_table(name=f"{catalog}.{schema}.inventory_raw_stream")
+input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/inventory/"
+
+
+dp.create_streaming_table(name="inventory_raw_stream")
 @dp.append_flow(target="inventory_raw_stream")
 def inventory_raw_stream():
   return (
@@ -41,7 +47,7 @@ def inventory_raw_stream():
         .withColumn("ingestion_time", current_timestamp())
   )
 
-dp.create_streaming_table(f"{catalog}.{schema}.inventory_cdc_stream")
+dp.create_streaming_table(name="inventory_cdc_stream")
 dp.create_auto_cdc_flow(
     source="inventory_raw_stream",
     target="inventory_cdc_stream",

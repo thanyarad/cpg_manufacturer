@@ -12,11 +12,16 @@ distributor_sale_order_schema=StructType([
     StructField("operation", StringType())
 ])
 
-input_file_path=r"/Volumes/dev/00_landing/data/distributor_sales_order/sale_order/"
-catalog="dev"
-schema="00_landing"
+# input_file_path=r"/Volumes/dev/00_landing/data/distributor_sales_order/sale_order/"
+# catalog="dev"
+# schema="00_landing"
+catalog_config=spark.conf.get("catalog")
+schema_config=spark.conf.get("pipeline_schema")
+volume_config=spark.conf.get("volume")
 
-dp.create_streaming_table(name=f"{catalog}.{schema}.distributor_sale_order_raw_stream")
+input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/distributor_sale_order/sale_order/"
+
+dp.create_streaming_table(name="distributor_sale_order_raw_stream")
 @dp.append_flow(target="distributor_sale_order_raw_stream")
 def distributor_sale_order_raw_stream():
   return (
@@ -28,7 +33,7 @@ def distributor_sale_order_raw_stream():
         .withColumn("ingestion_time", current_timestamp())
   )
 
-dp.create_streaming_table(f"{catalog}.{schema}.distributor_sale_order_cdc_stream")
+dp.create_streaming_table(name="distributor_sale_order_cdc_stream")
 dp.create_auto_cdc_flow(
     source="distributor_sale_order_raw_stream",
     target="distributor_sale_order_cdc_stream",

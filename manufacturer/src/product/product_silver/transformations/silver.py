@@ -2,14 +2,16 @@ from pyspark import pipelines as dp
 from pyspark.sql.functions import col, regexp_replace, when, length, trim, to_date, lit
 from pyspark.sql.types import DoubleType
 
-catalog="dev"
-from_schema="01_bronze"
-to_schema="02_silver"
+# catalog="dev"
+# from_schema="01_bronze"
+# to_schema="02_silver"
+catalog_config = spark.conf.get("catalog")
+schema_config = spark.conf.get("target_schema")
 
-@dp.materialized_view(name=f"{catalog}.{to_schema}.product_mv")
+@dp.materialized_view(name=f"{catalog_config}.{schema_config}.product_mv")
 @dp.expect_or_drop("valid_product", "product_id IS NOT NULL")
 def product_mv():
-    df = spark.read.table(f"{catalog}.{from_schema}.product_mv")
+    df = spark.read.table("product_mv")
 
     # Trim common string columns from the product JSON
     string_cols = [
