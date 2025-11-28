@@ -18,15 +18,15 @@ consumer_schema=StructType([
     StructField("operation", StringType())
 ])
 
-catalog=spark.conf.get("catalog", "dev")
-schema=spark.conf.get("pipeline_schema", "00_landing")
-volume=spark.conf.get("volume", "Volumes")
+catalog_config=spark.conf.get("catalog", "dev")
+schema_config=spark.conf.get("pipeline_schema", "00_landing")
+volume_config=spark.conf.get("volume")
 
-input_file_path=f"/Volumes/{catalog}/{schema}/{volume}/consumer/"
+input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/consumer"
 # catalog="dev"
 # schema="00_landing"
 
-dp.create_streaming_table(name="consumer_raw_stream")
+dp.create_streaming_table("consumer_raw_stream")
 @dp.append_flow(target="consumer_raw_stream")
 def consumer_raw_stream():
   return (

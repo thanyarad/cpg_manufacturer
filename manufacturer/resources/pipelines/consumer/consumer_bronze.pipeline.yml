@@ -11,7 +11,7 @@ resources:
       root_path: ../../../src/consumer/consumer_bronze
       configuration:
         catalog: ${var.catalog}
-        pipeline_schema: ${var.schema}
+        pipeline_schema: ${var.landing}
         target_schema: ${var.bronze}
         volume: ${var.input_volume}
 

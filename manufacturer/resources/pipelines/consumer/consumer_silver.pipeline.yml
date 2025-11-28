@@ -11,5 +11,5 @@ resources:
       root_path: ../../../src/consumer/consumer_silver
       configuration:
         catalog: ${var.catalog}
-        target_schema: ${var.bronze}
+        target_schema: ${var.silver}
 

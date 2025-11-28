@@ -4,10 +4,10 @@ from pyspark.sql.functions import col, regexp_replace, when, length, trim, to_da
 # catalog="dev"
 # from_schema="01_bronze"
 # to_schema="02_silver"
-catalog = spark.conf.get("catalog", "dev")
-schema = spark.conf.get("target_schema", "02_silver")
+catalog_config = spark.conf.get("catalog", "dev")
+schema_config = spark.conf.get("target_schema", "02_silver")
 
-@dp.materialized_view(name=f"{catalog}.{schema}.consumer_mv")
+@dp.materialized_view(name=f"{catalog_config}.{schema_config}.consumer_mv")
 @dp.expect_or_drop("valid_consumer", "consumer_id IS NOT NULL")
 def consumer_mv():
     df = spark.read.table("consumer_mv")
