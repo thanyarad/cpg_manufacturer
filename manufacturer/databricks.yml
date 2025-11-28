@@ -24,7 +24,7 @@ variables:
     # default: dev
     default: ${bundle.target}
   schema: 
-    description: The schema to be used.
+    description: The schema used for reading or writing data.
   input_volume:
     default: data
   landing:
@@ -53,7 +53,7 @@ targets:
       # host: https://dbc-dcffaa68-27b1.cloud.databricks.com
     variables:
       # catalog: dev
-      schema: dev
+      # schema: dev
   prod:
     mode: production
     presets:
@@ -64,7 +64,7 @@ targets:
       root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
     variables:
       # catalog: dev
-      schema: prod
+      # schema: prod
     permissions:
       - user_name: ${workspace.current_user.userName}
         level: CAN_MANAGE

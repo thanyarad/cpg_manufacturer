@@ -18,11 +18,15 @@ consumer_schema=StructType([
     StructField("operation", StringType())
 ])
 
-input_file_path=r"/Volumes/dev/00_landing/data/consumer/"
-catalog="dev"
-schema="00_landing"
+catalog=spark.conf.get("catalog", "dev")
+schema=spark.conf.get("pipeline_schema", "00_landing")
+volume=spark.conf.get("volume", "Volumes")
 
-dp.create_streaming_table(name=f"{catalog}.{schema}.consumer_raw_stream")
+input_file_path=f"/Volumes/{catalog}/{schema}/{volume}/consumer/"
+# catalog="dev"
+# schema="00_landing"
+
+dp.create_streaming_table(name="consumer_raw_stream")
 @dp.append_flow(target="consumer_raw_stream")
 def consumer_raw_stream():
   return (
@@ -34,7 +38,7 @@ def consumer_raw_stream():
         .withColumn("ingestion_time", current_timestamp())
   )
 
-dp.create_streaming_table(f"{catalog}.{schema}.consumer_cdc_stream")
+dp.create_streaming_table("consumer_cdc_stream")
 dp.create_auto_cdc_flow(
     source="consumer_raw_stream",
     target="consumer_cdc_stream",

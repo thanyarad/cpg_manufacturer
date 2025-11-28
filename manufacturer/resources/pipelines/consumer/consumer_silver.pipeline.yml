@@ -6,7 +6,10 @@ resources:
         - glob:
             include: ../../../src/consumer/consumer_silver/transformations/**
       serverless: true
-      catalog: dev
-      schema: 02_silver
+      catalog: ${var.catalog}
+      schema: ${var.bronze}
       root_path: ../../../src/consumer/consumer_silver
+      configuration:
+        catalog: ${var.catalog}
+        target_schema: ${var.bronze}
 
