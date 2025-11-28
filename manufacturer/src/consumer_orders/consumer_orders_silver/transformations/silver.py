@@ -1,17 +1,19 @@
 from pyspark import pipelines as dp
 from pyspark.sql.functions import col, trim, to_date, when
 
-catalog="dev"
-from_schema="01_bronze"
-to_schema="02_silver"
+# catalog="dev"
+# from_schema="01_bronze"
+# to_schema="02_silver"
+catalog_config = spark.conf.get("catalog")
+schema_config = spark.conf.get("target_schema")
 
 @dp.expect_all_or_drop({
     "valid_order": "order_id IS NOT NULL",
     "valid_consumer": "consumer_id IS NOT NULL"
 })
-@dp.temporary_view(name=f"consumer_order_temp")
+@dp.temporary_view(name="consumer_order_temp")
 def consumer_order_temp():
-    df = spark.read.table(f"{catalog}.{from_schema}.consumer_order_mv")
+    df = spark.read.table("consumer_order_mv")
     string_cols = ["order_status","currency","payment_method","channel","billing_address","shipping_address"]
     for c in string_cols:
         df = df.withColumn(c, trim(col(c)))
@@ -27,9 +29,9 @@ def consumer_order_temp():
     "valid_order": "order_id IS NOT NULL",
     "valid_order_item": "order_item_id IS NOT NULL"
 })
-@dp.temporary_view(name=f"consumer_order_item_temp")
+@dp.temporary_view(name="consumer_order_item_temp")
 def consumer_order_item_temp():
-    df = spark.read.table(f"{catalog}.{from_schema}.consumer_order_items_mv")
+    df = spark.read.table("consumer_order_items_mv")
     df = df.withColumn(
         "quantity",
         when(col("quantity").isNotNull() & (col("quantity") > 0), col("quantity"))
@@ -47,7 +49,7 @@ def consumer_order_item_temp():
     )
     return df
 
-@dp.materialized_view(name=f"{catalog}.{to_schema}.consumer_orders_mv")
+@dp.materialized_view(name=f"{catalog_config}.{schema_config}.consumer_orders_mv")
 def consumer_orders_silver_mv():
     consumer_order_temp()
     consumer_order_item_temp()

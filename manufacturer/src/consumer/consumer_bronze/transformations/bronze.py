@@ -4,8 +4,8 @@ from pyspark.sql.functions import col
 # catalog="dev"
 # from_schema="00_landing"
 # to_schema="01_bronze"
-catalog_config = spark.conf.get("catalog", "dev")
-schema_config = spark.conf.get("target_schema", "01_bronze")
+catalog_config = spark.conf.get("catalog")
+schema_config = spark.conf.get("target_schema")
 
 @dp.materialized_view(name=f"{catalog_config}.{schema_config}.consumer_mv")
 def consumer_mv():

@@ -18,11 +18,11 @@ consumer_schema=StructType([
     StructField("operation", StringType())
 ])
 
-catalog_config=spark.conf.get("catalog", "dev")
-schema_config=spark.conf.get("pipeline_schema", "00_landing")
+catalog_config=spark.conf.get("catalog")
+schema_config=spark.conf.get("pipeline_schema")
 volume_config=spark.conf.get("volume")
 
-input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/consumer"
+input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/consumer/"
 # catalog="dev"
 # schema="00_landing"
 

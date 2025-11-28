@@ -6,7 +6,12 @@ resources:
         - glob:
             include: ../../../src/consumer_orders/consumer_order_bronze/transformations/**
       serverless: true
-      catalog: dev
-      schema: 00_landing
+      catalog: ${var.catalog}
+      schema: ${var.landing}
       root_path: ../../../src/consumer_orders/consumer_order_bronze
+      configuration:
+        catalog: ${var.catalog}
+        pipeline_schema: ${var.landing}
+        target_schema: ${var.bronze}
+        volume: ${var.input_volume}
 
