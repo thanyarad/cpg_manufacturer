@@ -1,18 +1,20 @@
 from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 from pyspark.sql.functions import current_timestamp, col, expr
+from manufacturer import get_schema
 
-distributor_schema=StructType([
-    StructField("distributor_id", IntegerType()),
-    StructField("distributor_name", StringType()),
-    StructField("phone_number", StringType()),
-    StructField("street_address", StringType()),
-    StructField("postal_code", StringType()),
-    StructField("city", StringType()),
-    StructField("state", StringType()),
-    StructField("country", StringType()),
-    StructField("operation", StringType())
-])
+# distributor_schema=StructType([
+#     StructField("distributor_id", IntegerType()),
+#     StructField("distributor_name", StringType()),
+#     StructField("phone_number", StringType()),
+#     StructField("street_address", StringType()),
+#     StructField("postal_code", StringType()),
+#     StructField("city", StringType()),
+#     StructField("state", StringType()),
+#     StructField("country", StringType()),
+#     StructField("operation", StringType())
+# ])
+distributor_schema=get_schema("distributor")
 
 input_file_path=r"/Volumes/dev/00_landing/data/distributor/"
 catalog="dev"

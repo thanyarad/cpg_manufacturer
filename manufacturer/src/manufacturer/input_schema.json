@@ -1,0 +1,24 @@
+{
+  "consumer" : 
+  [
+    ["sales_order_id","string"],
+    ["distributor_id","int"],
+    ["order_date","string"],
+    ["expected_delivery_date","string"],
+    ["order_total_amount","double"],
+    ["currency","string"],
+    ["operation","string"]
+  ],
+  "distributor" :
+  [
+    ["distributor_id","int"],
+    ["distributor_name","string"],
+    ["phone_number","string"],
+    ["street_address","string"],
+    ["postal_code","string"],
+    ["city","string"],
+    ["state","string"],
+    ["country","string"],
+    ["operation","string"]
+  ]
+}
