@@ -1,7 +1,7 @@
 {
   "consumer" : 
   [
-    ["sales_order_id","string"],
+    ["sales_order_id","int"],
     ["distributor_id","int"],
     ["order_date","string"],
     ["expected_delivery_date","string"],

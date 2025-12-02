@@ -1,1 +1,1 @@
-from .schema import get_schema
+# from package import get_schema
