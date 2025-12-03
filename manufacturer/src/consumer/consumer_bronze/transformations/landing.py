@@ -1,26 +1,30 @@
 from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, BooleanType
 from pyspark.sql.functions import current_timestamp, col, expr
+from manufacturer.package.schema import get_schema
 
-consumer_schema=StructType([
-    StructField("consumer_id", IntegerType()),
-    StructField("name", StringType()),
-    StructField("age", IntegerType()),
-    StructField("gender", StringType()),
-    StructField("email", StringType()),
-    StructField("phone", StringType()),
-    StructField("address", StringType()),
-    StructField("city", StringType()),
-    StructField("state", StringType()),
-    StructField("country", StringType()),
-    StructField("registration_date", StringType()),
-    StructField("is_active", BooleanType()),
-    StructField("operation", StringType())
-])
-
+# consumer_schema=StructType([
+#     StructField("consumer_id", IntegerType()),
+#     StructField("name", StringType()),
+#     StructField("age", IntegerType()),
+#     StructField("gender", StringType()),
+#     StructField("email", StringType()),
+#     StructField("phone", StringType()),
+#     StructField("address", StringType()),
+#     StructField("city", StringType()),
+#     StructField("state", StringType()),
+#     StructField("country", StringType()),
+#     StructField("registration_date", StringType()),
+#     StructField("is_active", BooleanType()),
+#     StructField("operation", StringType())
+# ])
 catalog_config=spark.conf.get("catalog")
 schema_config=spark.conf.get("pipeline_schema")
 volume_config=spark.conf.get("volume")
+metadata_config=spark.conf.get("metadata_path")
+
+schema_path=f"/Volumes/{catalog_config}/{schema_config}/{metadata_config}"
+consumer_schema=get_schema("consumer",schema_path)
 
 input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/consumer/"
 # catalog="dev"

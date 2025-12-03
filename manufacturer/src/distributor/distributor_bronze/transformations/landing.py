@@ -1,25 +1,31 @@
 from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 from pyspark.sql.functions import current_timestamp, col, expr
+from manufacturer.package.schema import get_schema
 
-distributor_schema=StructType([
-    StructField("distributor_id", IntegerType()),
-    StructField("distributor_name", StringType()),
-    StructField("phone_number", StringType()),
-    StructField("street_address", StringType()),
-    StructField("postal_code", StringType()),
-    StructField("city", StringType()),
-    StructField("state", StringType()),
-    StructField("country", StringType()),
-    StructField("operation", StringType())
-])
+# distributor_schema=StructType([
+#     StructField("distributor_id", IntegerType()),
+#     StructField("distributor_name", StringType()),
+#     StructField("phone_number", StringType()),
+#     StructField("street_address", StringType()),
+#     StructField("postal_code", StringType()),
+#     StructField("city", StringType()),
+#     StructField("state", StringType()),
+#     StructField("country", StringType()),
+#     StructField("operation", StringType())
+# ])
 
 # input_file_path=r"/Volumes/dev/00_landing/data/distributor/"
 # catalog="dev"
 # schema="00_landing"
+
 catalog_config=spark.conf.get("catalog")
 schema_config=spark.conf.get("pipeline_schema")
 volume_config=spark.conf.get("volume")
+metadata_config=spark.conf.get("metadata_path")
+
+schema_path=f"/Volumes/{catalog_config}/{schema_config}/{metadata_config}"
+distributor_schema=get_schema("distributor",schema_path)
 
 input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/distributor/"
 

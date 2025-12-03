@@ -1,6 +1,7 @@
 from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 from pyspark.sql.functions import current_timestamp, col, expr
+from manufacturer.package.schema import get_schema
 
 # distributor invoice item
 # {
@@ -33,6 +34,10 @@ distributor_invoice_item_schema=StructType([
 catalog_config=spark.conf.get("catalog")
 schema_config=spark.conf.get("pipeline_schema")
 volume_config=spark.conf.get("volume")
+metadata_config=spark.conf.get("metadata_path")
+
+schema_path=f"/Volumes/{catalog_config}/{schema_config}/{metadata_config}"
+distributor_invoice_item_schema=get_schema("distributor_invoice_item",schema_path)
 
 input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/distributor_invoice/invoice_item/"
 

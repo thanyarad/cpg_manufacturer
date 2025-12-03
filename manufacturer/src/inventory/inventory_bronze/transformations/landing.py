@@ -1,29 +1,30 @@
 from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, BooleanType
 from pyspark.sql.functions import current_timestamp, col, expr
+from manufacturer.package.schema import get_schema
 
-inventory_schema = StructType([
-  StructField("inventory_id", IntegerType()),
-  StructField("product_id", IntegerType()),
-  StructField("location_type", StringType()),
-  StructField("location_name", StringType()),
-  StructField("location_code", StringType()),
-  StructField("address", StringType()),
-  StructField("city", StringType()),
-  StructField("state", StringType()),
-  StructField("country", StringType()),
-  StructField("phone", StringType()),
-  StructField("email", StringType()),
-  StructField("location_is_active", BooleanType()),
-  StructField("quantity_on_hand", IntegerType()),
-  StructField("reorder_level", IntegerType()),
-  StructField("reorder_quantity", IntegerType()),
-  StructField("safety_stock_level", IntegerType()),
-  StructField("inventory_status", StringType()),
-  StructField("last_restock_date", StringType()),
-  StructField("last_updated", StringType()),
-  StructField("operation", StringType())
-])
+# inventory_schema = StructType([
+#   StructField("inventory_id", IntegerType()),
+#   StructField("product_id", IntegerType()),
+#   StructField("location_type", StringType()),
+#   StructField("location_name", StringType()),
+#   StructField("location_code", StringType()),
+#   StructField("address", StringType()),
+#   StructField("city", StringType()),
+#   StructField("state", StringType()),
+#   StructField("country", StringType()),
+#   StructField("phone", StringType()),
+#   StructField("email", StringType()),
+#   StructField("location_is_active", BooleanType()),
+#   StructField("quantity_on_hand", IntegerType()),
+#   StructField("reorder_level", IntegerType()),
+#   StructField("reorder_quantity", IntegerType()),
+#   StructField("safety_stock_level", IntegerType()),
+#   StructField("inventory_status", StringType()),
+#   StructField("last_restock_date", StringType()),
+#   StructField("last_updated", StringType()),
+#   StructField("operation", StringType())
+# ])
 
 # input_file_path = r"/Volumes/dev/00_landing/data/inventory/"
 # catalog="dev"
@@ -31,6 +32,10 @@ inventory_schema = StructType([
 catalog_config=spark.conf.get("catalog")
 schema_config=spark.conf.get("pipeline_schema")
 volume_config=spark.conf.get("volume")
+metadata_config=spark.conf.get("metadata_path")
+
+schema_path=f"/Volumes/{catalog_config}/{schema_config}/{metadata_config}"
+inventory_schema=get_schema("inventory",schema_path)
 
 input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/inventory/"
 

@@ -1,26 +1,27 @@
 from pyspark import pipelines as dp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, BooleanType, DoubleType
 from pyspark.sql.functions import current_timestamp, col, expr
+from manufacturer.package.schema import get_schema
 
-product_schema = StructType([
-  StructField("product_id", IntegerType()),
-  StructField("product_name", StringType()),
-  StructField("brand", StringType()),
-  StructField("manufacturer", StringType()),
-  StructField("category", StringType()),
-  StructField("department", StringType()),
-  StructField("description", StringType()),
-  StructField("sku_id", StringType()),
-  StructField("upc", StringType()),
-  StructField("gtin", StringType()),
-  StructField("unit_price", DoubleType()),
-  StructField("retail_price", DoubleType()),
-  StructField("unit_of_measurement", StringType()),
-  StructField("expiration_days", IntegerType()),
-  StructField("product_status", StringType()),
-  StructField("release_date", StringType()),
-  StructField("operation", StringType())
-])
+# product_schema = StructType([
+#   StructField("product_id", IntegerType()),
+#   StructField("product_name", StringType()),
+#   StructField("brand", StringType()),
+#   StructField("manufacturer", StringType()),
+#   StructField("category", StringType()),
+#   StructField("department", StringType()),
+#   StructField("description", StringType()),
+#   StructField("sku_id", StringType()),
+#   StructField("upc", StringType()),
+#   StructField("gtin", StringType()),
+#   StructField("unit_price", DoubleType()),
+#   StructField("retail_price", DoubleType()),
+#   StructField("unit_of_measurement", StringType()),
+#   StructField("expiration_days", IntegerType()),
+#   StructField("product_status", StringType()),
+#   StructField("release_date", StringType()),
+#   StructField("operation", StringType())
+# ])
 
 # input_file_path=r"/Volumes/dev/00_landing/data/product/"
 # catalog="dev"
@@ -28,6 +29,10 @@ product_schema = StructType([
 catalog_config=spark.conf.get("catalog")
 schema_config=spark.conf.get("pipeline_schema")
 volume_config=spark.conf.get("volume")
+metadata_config=spark.conf.get("metadata_path")
+
+schema_path=f"/Volumes/{catalog_config}/{schema_config}/{metadata_config}"
+product_schema=get_schema("product",schema_path)
 
 input_file_path=f"/Volumes/{catalog_config}/{schema_config}/{volume_config}/product/"
 

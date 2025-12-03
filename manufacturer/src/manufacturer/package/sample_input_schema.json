@@ -1,0 +1,133 @@
+{
+  "consumer": [
+    ["sales_order_id", "int"],
+    ["distributor_id", "int"],
+    ["order_date", "string"],
+    ["expected_delivery_date", "string"],
+    ["order_total_amount", "double"],
+    ["currency", "string"],
+    ["operation", "string"]
+  ],
+
+  "distributor": [
+    ["distributor_id", "int"],
+    ["distributor_name", "string"],
+    ["phone_number", "string"],
+    ["street_address", "string"],
+    ["postal_code", "string"],
+    ["city", "string"],
+    ["state", "string"],
+    ["country", "string"],
+    ["operation", "string"]
+  ],
+
+  "consumer_order": [
+    ["order_id", "int"],
+    ["consumer_id", "int"],
+    ["order_date", "string"],
+    ["order_status", "string"],
+    ["total_amount", "double"],
+    ["currency", "string"],
+    ["payment_method", "string"],
+    ["channel", "string"],
+    ["billing_address", "string"],
+    ["shipping_address", "string"],
+    ["operation", "string"]
+  ],
+
+  "consumer_order_items": [
+    ["order_item_id", "int"],
+    ["order_id", "int"],
+    ["product_id", "int"],
+    ["quantity", "int"],
+    ["unit_price", "double"],
+    ["total_price", "double"],
+    ["operation", "string"]
+  ],
+
+  "distributor_invoice": [
+    ["invoice_id", "int"],
+    ["invoice_date", "string"],
+    ["invoice_total_amount", "double"],
+    ["currency", "string"],
+    ["tax_amount", "double"],
+    ["invoice_type", "string"],
+    ["operation", "string"]
+  ],
+
+  "distributor_invoice_item": [
+    ["invoice_id", "int"],
+    ["invoice_item_no", "int"],
+    ["product_id", "int"],
+    ["invoiced_quantity", "int"],
+    ["invoiced_quantity_uom", "string"],
+    ["invoice_item_total_amount", "double"],
+    ["sales_order_id", "int"],
+    ["sales_order_item_no", "int"],
+    ["operation", "string"]
+  ],
+
+  "distributor_sale_order": [
+    ["sales_order_id", "int"],
+    ["distributor_id", "int"],
+    ["order_date", "string"],
+    ["expected_delivery_date", "string"],
+    ["order_total_amount", "double"],
+    ["currency", "string"],
+    ["operation", "string"]
+  ],
+
+  "distributor_sale_order_item": [
+    ["sales_order_id", "int"],
+    ["sales_order_item_no", "int"],
+    ["product_id", "int"],
+    ["order_quantity", "int"],
+    ["order_quantity_uom", "string"],
+    ["unit_price", "double"],
+    ["item_total_amount", "double"],
+    ["operation", "string"]
+  ],
+
+  "inventory": [
+    ["inventory_id", "int"],
+    ["product_id", "int"],
+    ["location_type", "string"],
+    ["location_name", "string"],
+    ["location_code", "string"],
+    ["address", "string"],
+    ["city", "string"],
+    ["state", "string"],
+    ["country", "string"],
+    ["phone", "string"],
+    ["email", "string"],
+    ["location_is_active", "boolean"],
+    ["quantity_on_hand", "int"],
+    ["reorder_level", "int"],
+    ["reorder_quantity", "int"],
+    ["safety_stock_level", "int"],
+    ["inventory_status", "string"],
+    ["last_restock_date", "string"],
+    ["last_updated", "string"],
+    ["operation", "string"]
+  ],
+
+  "product": [
+    ["product_id", "int"],
+    ["product_name", "string"],
+    ["brand", "string"],
+    ["manufacturer", "string"],
+    ["category", "string"],
+    ["department", "string"],
+    ["description", "string"],
+    ["sku_id", "string"],
+    ["upc", "string"],
+    ["gtin", "string"],
+    ["unit_price", "double"],
+    ["retail_price", "double"],
+    ["unit_of_measurement", "string"],
+    ["expiration_days", "int"],
+    ["product_status", "string"],
+    ["release_date", "string"],
+    ["operation", "string"]
+  ]
+}

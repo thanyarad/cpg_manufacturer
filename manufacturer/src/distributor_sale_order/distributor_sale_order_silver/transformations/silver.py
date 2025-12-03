@@ -1,11 +1,16 @@
 from pyspark import pipelines as dp
 from pyspark.sql.functions import col, when, trim, to_date, lit
+from manufacturer.package.schema import get_schema
 
 # catalog="dev"
 # from_schema="01_bronze"
 # to_schema="02_silver"
 catalog_config = spark.conf.get("catalog")
 schema_config = spark.conf.get("target_schema")
+# metadata_config=spark.conf.get("metadata_path")
+
+# schema_path=f"/Volumes/{catalog_config}/{schema_config}/{metadata_config}"
+# distributor_sale_order_schema=get_schema("distributor_sale_order",schema_path)
 
 @dp.expect_all_or_drop({
     "valid_distributor": "distributor_id IS NOT NULL",
