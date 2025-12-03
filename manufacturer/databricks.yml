@@ -54,7 +54,7 @@ targets:
       # host: https://dbc-dcffaa68-27b1.cloud.databricks.com
     variables:
       # catalog: dev
-      # schema: dev
+      schema: dev
   prod:
     mode: production
     presets:
