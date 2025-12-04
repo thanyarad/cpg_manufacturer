@@ -21,13 +21,13 @@ artifacts:
 # Variable declarations. These variables are assigned in the dev/prod targets below.
 variables:
   catalog: 
-    # default: dev
     default: ${bundle.target}
   schema: 
-    description: The schema used for reading or writing data.
-    default: demo
+    description: The schema to be used.
   input_volume:
     default: data
+  metadata_path:
+    default: meta_data/input_schema.json
   landing:
     default: 00_landing
   bronze:
@@ -54,22 +54,18 @@ targets:
       # host: https://dbc-dcffaa68-27b1.cloud.databricks.com
     variables:
       # catalog: dev
-      # schema: demo
-  testing:
-    mode: development 
-    presets:
-      name_prefix: "[${bundle.target} ${workspace.current_user.short_name}] "
+      schema: dev
   prod:
     mode: production
     presets:
-      name_prefix: "[${bundle.target} ${workspace.current_user.short_name}] "
+      name_prefix: 'prod_'
     workspace:
       # host: https://dbc-dcffaa68-27b1.cloud.databricks.com
       # We explicitly deploy to /Workspace/Users/thanyarkottary2003@gmail.com to make sure we only have a single copy.
       root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
     variables:
       # catalog: dev
-      # schema: demo
+      # schema: prod
     permissions:
       - user_name: ${workspace.current_user.userName}
         level: CAN_MANAGE
