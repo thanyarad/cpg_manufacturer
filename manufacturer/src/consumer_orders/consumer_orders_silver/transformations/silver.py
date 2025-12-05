@@ -1,6 +1,12 @@
 from pyspark import pipelines as dp
 from pyspark.sql.functions import col, trim, to_date, when
 from manufacturer.package.schema import get_schema
+from manufacturer.utils.transform_utils import (
+    trim_columns,
+    convert_order_date,
+    validate_non_negative,
+    validate_positive_integer
+)
 
 # catalog="dev"
 # from_schema="01_bronze"
@@ -19,15 +25,18 @@ schema_config = spark.conf.get("target_schema")
 @dp.temporary_view(name="consumer_order_temp")
 def consumer_order_temp():
     df = spark.read.table("consumer_order_mv")
-    string_cols = ["order_status","currency","payment_method","channel","billing_address","shipping_address"]
-    for c in string_cols:
-        df = df.withColumn(c, trim(col(c)))
-    df = df.withColumn("order_date", to_date(col("order_date"), "yyyy-MM-dd"))
-    df = df.withColumn(
-        "total_amount",
-        when(col("total_amount").isNotNull() & (col("total_amount") >= 0), col("total_amount"))
-        .otherwise(None)
-    )
+    # Trim columns
+    df = trim_columns(df, [
+        "order_status", "currency", "payment_method",
+        "channel", "billing_address", "shipping_address"
+    ])
+
+    # Convert order_date
+    df = convert_order_date(df, "order_date")
+
+    # Validate total_amount
+    df = validate_non_negative(df, ["total_amount"])
+
     return df
 
 @dp.expect_all_or_drop({
@@ -37,21 +46,8 @@ def consumer_order_temp():
 @dp.temporary_view(name="consumer_order_item_temp")
 def consumer_order_item_temp():
     df = spark.read.table("consumer_order_items_mv")
-    df = df.withColumn(
-        "quantity",
-        when(col("quantity").isNotNull() & (col("quantity") > 0), col("quantity"))
-        .otherwise(None)
-    )
-    df = df.withColumn(
-        "unit_price",
-        when(col("unit_price").isNotNull() & (col("unit_price") >= 0), col("unit_price"))
-        .otherwise(None)
-    )
-    df = df.withColumn(
-        "total_price",
-        when(col("total_price").isNotNull() & (col("total_price") >= 0), col("total_price"))
-        .otherwise(None)
-    )
+     df = validate_positive_integer(df, "quantity")
+    df = validate_non_negative(df, ["unit_price", "total_price"])
     return df
 
 @dp.materialized_view(name=f"{catalog_config}.{schema_config}.consumer_orders_mv")

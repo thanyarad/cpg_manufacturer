@@ -1,7 +1,13 @@
 from pyspark import pipelines as dp
 from pyspark.sql.functions import col, when, trim, to_date, lit
 from manufacturer.package.schema import get_schema
-
+from manufacturer.utils.transform_utils import (
+    convert_to_date,
+    trim_string_columns,
+    validate_positive,
+    validate_non_negative,
+    validate_positive_integer
+)
 # catalog="dev"
 # from_schema="01_bronze"
 # to_schema="02_silver"
@@ -19,8 +25,13 @@ schema_config = spark.conf.get("target_schema")
 @dp.temporary_view(name="sale_order_temp")
 def sale_order_temp():
     df=spark.read.table("distributor_sale_order_mv")
-    df=df.withColumn("order_date",to_date(col("order_date"),"yyyy-MM-dd"))
-    df=df.withColumn("expected_delivery_date",to_date(col("expected_delivery_date"),"yyyy-MM-dd"))
+    # reusable: convert date columns
+    df = convert_to_date(df, "order_date")
+    df = convert_to_date(df, "expected_delivery_date")
+
+    # trim string columns
+    df = trim_string_columns(df, ["currency"])
+
     return df
 
 @dp.expect_all_or_drop({
@@ -30,11 +41,17 @@ def sale_order_temp():
 @dp.temporary_view(name="sale_order_item_temp")
 def sale_order_item_temp():
     df=spark.read.table("distributor_sale_order_item_mv")
-    df=df.filter(col("order_quantity") >= 1)
-    df=df.withColumn(
-        "order_quantity_uom",
-        trim(when(col("order_quantity_uom").isNull(), lit("NA")).otherwise(col("order_quantity_uom")))
-    )
+    # validate quantity > 0
+    df = validate_positive_integer(df, "order_quantity")
+
+    # validate unit price positive
+    df = validate_positive(df, ["unit_price"])
+
+    # validate amount non negative
+    df = validate_non_negative(df, ["item_total_amount"])
+
+    # default trim on UOM
+    df = trim_string_columns(df, ["order_quantity_uom"])
     df=df.withColumn(
         "item_total_amount",
         when(

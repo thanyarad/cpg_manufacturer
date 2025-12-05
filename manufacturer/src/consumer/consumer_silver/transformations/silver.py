@@ -1,7 +1,12 @@
 from pyspark import pipelines as dp
 from pyspark.sql.functions import col, regexp_replace, when, length, trim, to_date
 from manufacturer.package.schema import get_schema
-
+from manufacturer.utils.transform_utils import (
+    trim_columns,
+    normalize_phone,
+    validate_email,
+    convert_date
+)
 # catalog="dev"
 # from_schema="01_bronze"
 # to_schema="02_silver"
@@ -16,16 +21,17 @@ consumer_schema=get_schema("consumer",schema_path)
 @dp.expect_or_drop("valid_consumer", "consumer_id IS NOT NULL")
 def consumer_mv():
     df = spark.read.table("consumer_mv")
-    string_cols = ["name","gender","email","phone","address","city","state","country"]
-    for c in string_cols:
-        df = df.withColumn(c, trim(col(c)))
-    df = df.withColumn(
-        "phone",
-        when(
-            length(regexp_replace(col("phone"), r"[^\d]", "")) >= 10,
-            regexp_replace(col("phone"), r"[^\d]", "")
-        ).otherwise("Invalid")
-    )
-    df = df.withColumn("registration_date", to_date(col("registration_date"), "yyyy-MM-dd"))
+    # Trim string columns
+    df = trim_columns(df, ["name", "gender", "email", "phone", "address", "city", "state", "country"])
+
+    # Validate email
+    df = validate_email(df, "email")
+
+    # Normalize & validate phone
+    df = normalize_phone(df, "phone")
+
+    # Convert registration_date
+    df = convert_date(df, "registration_date")
+
     return df
 

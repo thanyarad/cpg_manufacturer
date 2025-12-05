@@ -1,7 +1,7 @@
 from pyspark import pipelines as dp
 from pyspark.sql.functions import col, when, trim, to_date, lit
 from manufacturer.package.schema import get_schema
-
+from manufacturer.utils.transform_utils import convert_to_date, validate_positive, validate_non_negative
 # catalog="dev"
 # from_schema="01_bronze"
 # to_schema="02_silver"
@@ -17,11 +17,14 @@ schema_config = spark.conf.get("target_schema")
 @dp.temporary_view(name="invoice_temp")
 def invoice_temp():
     df=spark.read.table("distributor_invoice_mv")
-    df=df.withColumn("invoice_date",to_date(col("invoice_date"),"yyyy-MM-dd"))
-    string_col=["currency","invoice_type"]
-    for i in string_col:
-        df=df.withColumn(i,trim(when(col(i).isNull(), lit("NA")).otherwise(col(i))))
-    return df
+    
+    # Reusable date validation
+    df = convert_to_date(df, "invoice_date")
+
+
+    # Amount validations
+    df = validate_positive(df, ["invoice_total_amount"])
+    df = validate_non_negative(df, ["tax_amount"])
 
 @dp.expect_all_or_drop({
     "valid_invoice" : "invoice_id is NOT NULL",
@@ -33,8 +36,8 @@ def invoice_temp():
 @dp.temporary_view(name=f"invoice_item_temp")
 def invoice_item_temp():
     df=spark.read.table("distributor_invoice_item_mv")
-    df=df.filter(col("invoiced_quantity") >= 1)
-    df=df.filter(col("invoice_item_total_amount") > 0)
+    # Validate item amount
+    df = validate_positive_amount(df, ["invoice_item_total_amount"])
     df=df.withColumn("invoiced_quantity_uom", trim(when(col("invoiced_quantity_uom").isNull(), lit("NA")).otherwise(col("invoiced_quantity_uom"))))
     return df
 

@@ -2,7 +2,12 @@ from pyspark import pipelines as dp
 from pyspark.sql.functions import col, regexp_replace, when, length, trim, to_date, lit
 from pyspark.sql.types import DoubleType
 from manufacturer.package.schema import get_schema
-
+from manufacturer.utils.transform_utils import (
+    trim_string_columns,
+    normalize_digits,
+    validate_numeric,
+    convert_to_date,
+)
 # catalog="dev"
 # from_schema="01_bronze"
 # to_schema="02_silver"
@@ -18,31 +23,22 @@ product_schema=get_schema("product",schema_path)
 def product_mv():
     df = spark.read.table("product_mv")
 
-    # Trim common string columns from the product JSON
+    # Trim
     string_cols = [
-        "product_name", "brand", "manufacturer", "category",
-        "department", "description", "sku_id", "upc", "gtin",
+        "product_name", "brand", "manufacturer", "category", "department",
+        "description", "sku_id", "upc", "gtin",
         "unit_of_measurement", "product_status"
     ]
-    for c in string_cols:
-        df = df.withColumn(c, trim(col(c)))
+    df = trim_string_columns(df, string_cols)
 
-    # Normalize UPC/GTIN to digits only; set to null if too short
-    df = df.withColumn("upc_digits", regexp_replace(col("upc"), r"[^\d]", ""))
-    df = df.withColumn("gtin_digits", regexp_replace(col("gtin"), r"[^\d]", ""))
-    df = df.withColumn("upc", when(length(col("upc_digits")) >= 8, col("upc_digits")).otherwise(lit(None))).drop("upc_digits")
-    df = df.withColumn("gtin", when(length(col("gtin_digits")) >= 8, col("gtin_digits")).otherwise(lit(None))).drop("gtin_digits")
+    # Normalize UPC/GTIN
+    df = normalize_digits(df, "upc")
+    df = normalize_digits(df, "gtin")
 
-    # Ensure numeric prices are doubles and non-negative
-    df = df.withColumn("unit_price", col("unit_price").cast(DoubleType()))
-    df = df.withColumn("retail_price", col("retail_price").cast(DoubleType()))
-    df = df.withColumn("unit_price", when(col("unit_price") >= 0, col("unit_price")).otherwise(lit(None)))
-    df = df.withColumn("retail_price", when(col("retail_price") >= 0, col("retail_price")).otherwise(lit(None)))
+    # Validate numeric columns
+    df = validate_numeric(df, ["unit_price", "retail_price"])
 
-    # Convert release_date to date
-    df = df.withColumn("release_date", to_date(col("release_date"), "yyyy-MM-dd"))
-
-    # Filter to active products only
-    # df = df.filter(col("product_status") == "Active")
+    # Convert date
+    df = convert_to_date(df, "release_date")
 
     return df
